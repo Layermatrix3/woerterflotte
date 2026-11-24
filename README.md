@@ -34,7 +34,7 @@ Für einen Test mit nur einem Rechner nutze zwei separate Browserprofile oder zw
 
 ## Fragen und Lehrermodus
 
-`data/fremdwoerter.json` enthält die 24 Tafelwörter mit Bedeutung, Lückensatz, falschen Optionen, zulässigen Varianten und Schwierigkeit. Daraus erzeugt das Spiel sechs Fragetypen mit 144 Fragen im vollständigen gemischten Grundkatalog. Die Reihenfolge und Optionen werden pro Partie gemischt. Eine Runde durch den Fragenstapel enthält jede passende Frage einmal.
+`data/fremdwoerter.json` enthält 100 Fremdwörter, darunter die 24 ursprünglichen Tafelwörter, mit Bedeutung, Lückensatz, falschen Optionen, zulässigen Varianten und Schwierigkeit. Daraus erzeugt das Spiel sechs Fragetypen mit 600 Fragen im vollständigen gemischten Grundkatalog. Die Reihenfolge und Optionen werden pro Partie gemischt. Eine Runde durch den Fragenstapel enthält jede passende Frage einmal.
 
 Der Lehrermodus speichert Ergänzungen und eigene Fragen im Browser. Über **Vorgaben und Lehrerkatalog übernehmen** wird der Katalog bei der nächsten Partie vorausgewählt. Beim Erstellen einer Lobby kannst du diese Auswahl umschalten. Eine Lobby erhält eine feste Kopie des gewählten Katalogs.
 

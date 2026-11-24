@@ -1,4 +1,4 @@
-const CACHE = 'woerterflotte-v1';
+const CACHE = 'woerterflotte-v2';
 const ASSETS = ['./', './index.html', './css/style.css', './manifest.json', './assets/ship.svg',
   './js/vendor/qrcode.js', './assets/radar.svg', './assets/touch.png', './data/fremdwoerter.json',
   ...['app','ui','board','game','questions','multiplayer','firebase-config','pages','sounds'].map(name => './js/' + name + '.js')];

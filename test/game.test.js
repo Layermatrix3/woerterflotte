@@ -13,10 +13,14 @@ const answer = game => getQuestion(pool, game.seed, game.index).answer;
 const act = (game, actor, type, details = {}, now = game.asked + 100, board) =>
   transition(game, config, pool, actor, {type, revision:game.revision, ...details}, now, board);
 
-test('24 Wörter, sechs Fragetypen und eine vollständige Runde ohne Wiederholungen', () => {
-  assert.equal(catalog.words.length, 24);
-  assert.equal(pool.length, 24 * 6);
+test('100 Wörter, sechs Fragetypen und eine vollständige Runde ohne Wiederholungen', () => {
+  assert.equal(catalog.words.length, 100);
+  assert.equal(pool.length, 100 * 6);
   assert.equal(new Set(pool.map(question => question.type)).size, 6);
+  for (const word of ['Akrobat','Chamäleon','Jongleur','Hypothese','Mikrofon','Roboter']) {
+    assert.equal(pool.filter(question => question.word === word).length, 6);
+  }
+  assert.ok(catalog.words.every(word => new Set(word.wrong).size === 3));
   const prompts = Array.from({length:pool.length}, (_, index) => getQuestion(pool, 743, index).prompt);
   assert.equal(new Set(prompts).size, pool.length);
   assert.ok(accepts(getQuestion(pool.filter(q => q.word === 'Paragraph' && q.type === 'text'), 1, 0), ' paragraf '));

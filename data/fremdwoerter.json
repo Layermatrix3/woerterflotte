@@ -433,6 +433,1000 @@
         "Verzeichnis der Straßen einer Stadt",
         "Wörterbuch mit alphabetisch geordneten Einträgen"
       ]
+    },
+    {
+      "word": "Roboter",
+      "meaning": "Programmierbare Maschine, die Aufgaben selbstständig ausführen kann",
+      "example": "Der ______ sortierte die Schrauben nach ihrer Größe.",
+      "wrong": [
+        "Robohter",
+        "Robbotter",
+        "Robotter"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Akrobat",
+      "meaning": "Künstler, der schwierige Körperübungen vorführt",
+      "example": "Der ______ balancierte auf einem Seil.",
+      "wrong": [
+        "Ackrobat",
+        "Akrobaht",
+        "Akrobatt"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Alarm",
+      "meaning": "Signal, das vor einer Gefahr warnt",
+      "example": "Der Rauchmelder schlug ______.",
+      "wrong": [
+        "Alahrm",
+        "Allarm",
+        "Alarmm"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Album",
+      "meaning": "Buch zum Sammeln von Bildern oder Zusammenstellung von Musikstücken",
+      "example": "Das erste Foto im ______ zeigt einen Fisch mit Hut.",
+      "wrong": [
+        "Alboom",
+        "Albhum",
+        "Albumm"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Amulett",
+      "meaning": "Schmuckstück, das Glück bringen oder schützen soll",
+      "example": "Die Fantasiefigur trug ein silbernes ______.",
+      "wrong": [
+        "Amuleht",
+        "Ammulett",
+        "Amullett"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Anekdote",
+      "meaning": "Kurze, oft unterhaltsame Geschichte über ein besonderes Ereignis",
+      "example": "Opa erzählte eine ______ über seinen ersten Schultag.",
+      "wrong": [
+        "Anegdote",
+        "Aneckdote",
+        "Anekdoote"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Antenne",
+      "meaning": "Vorrichtung zum Empfangen oder Senden von Funksignalen",
+      "example": "Auf dem Dach drehte sich die ______ im Wind.",
+      "wrong": [
+        "Antene",
+        "Anthenne",
+        "Antänne"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Applaus",
+      "meaning": "Beifall durch Klatschen",
+      "example": "Nach der Vorstellung gab es lauten ______.",
+      "wrong": [
+        "Aplaus",
+        "Applauß",
+        "Applous"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Aquarium",
+      "meaning": "Wasserbehälter für Wassertiere oder Wasserpflanzen",
+      "example": "Im ______ versteckte sich der Fisch hinter einem Stein.",
+      "wrong": [
+        "Aqarium",
+        "Aquarrium",
+        "Aquarihum"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Archipel",
+      "meaning": "Gruppe von Inseln",
+      "example": "Ein vulkanischer ______ ist eine Inselgruppe mit vulkanischem Ursprung.",
+      "wrong": [
+        "Archipell",
+        "Arschipel",
+        "Arkhipel"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Arktis",
+      "meaning": "Gebiet rund um den Nordpol",
+      "example": "In der ______ leben Eisbären.",
+      "wrong": [
+        "Arcktis",
+        "Arktiss",
+        "Arkties"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Astronaut",
+      "meaning": "Raumfahrer",
+      "example": "Der ______ ließ eine Erbse durch die Raumstation schweben.",
+      "wrong": [
+        "Astronout",
+        "Asthronaut",
+        "Astronauht"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Atlas",
+      "meaning": "Sammlung von Landkarten in Buchform",
+      "example": "Im ______ suchten wir die kleinste Insel.",
+      "wrong": [
+        "Atlass",
+        "Atlahs",
+        "Atllas"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Attrappe",
+      "meaning": "Nachbildung, die wie das Original aussehen soll",
+      "example": "Der Felsen auf der Bühne war eine ______ aus Pappe.",
+      "wrong": [
+        "Atrappe",
+        "Attrape",
+        "Atttrappe"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Ballon",
+      "meaning": "Mit Luft oder Gas gefüllte Hülle",
+      "example": "Der ______ sah aus wie ein lila Oktopus.",
+      "wrong": [
+        "Balon",
+        "Ballohn",
+        "Ballonn"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Bambus",
+      "meaning": "Pflanze aus der Familie der Gräser mit festen Halmen",
+      "example": "Der Panda knabberte am ______.",
+      "wrong": [
+        "Bambuss",
+        "Bambuhs",
+        "Bamppus"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Barometer",
+      "meaning": "Gerät zum Messen des Luftdrucks",
+      "example": "Das ______ zeigte sinkenden Luftdruck an.",
+      "wrong": [
+        "Barrometer",
+        "Barrometter",
+        "Baromether"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Bibliothek",
+      "meaning": "Sammlung von Medien oder Einrichtung, die sie bereitstellt",
+      "example": "In der ______ lieh sich Nia ein Buch über Tiefseetiere aus.",
+      "wrong": [
+        "Bibliotek",
+        "Biblioteck",
+        "Bibliotheck"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Biologie",
+      "meaning": "Wissenschaft von Lebewesen",
+      "example": "In ______ untersuchen wir, wie Pflanzen wachsen.",
+      "wrong": [
+        "Biolohgie",
+        "Biollogie",
+        "Biolokie"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Bumerang",
+      "meaning": "Wurfgerät, das bei geeigneter Form und richtigem Wurf zurückkehren kann",
+      "example": "Der ______ flog einen weiten Bogen.",
+      "wrong": [
+        "Bummerang",
+        "Bumerangg",
+        "Bumerangk"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Buffet",
+      "meaning": "Anrichte mit Speisen, von der man sich selbst bedient",
+      "example": "Am ______ waren die Mini-Pfannkuchen zuerst weg.",
+      "wrong": [
+        "Buffett",
+        "Bufett",
+        "Bufféh"
+      ],
+      "difficulty": 1,
+      "aliases": [
+        "Büfett"
+      ],
+      "questions": []
+    },
+    {
+      "word": "Chamäleon",
+      "meaning": "Echse, die ihre Hautfarbe verändern kann",
+      "example": "Das ______ saß reglos auf einem Ast.",
+      "wrong": [
+        "Chamälion",
+        "Kamäleon",
+        "Chamäleeon"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Chemie",
+      "meaning": "Wissenschaft von Stoffen und ihren Umwandlungen",
+      "example": "Im Fach ______ beobachteten wir eine Farbänderung.",
+      "wrong": [
+        "Chemmi",
+        "Cheemie",
+        "Chemihe"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Chef",
+      "meaning": "Person, die eine Gruppe oder einen Betrieb leitet",
+      "example": "Der ______ der Küche probierte die Suppe.",
+      "wrong": [
+        "Scheff",
+        "Chäf",
+        "Cheff"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Clown",
+      "meaning": "Figur, die das Publikum mit komischen Auftritten unterhält",
+      "example": "Der ______ jonglierte mit drei Gummienten.",
+      "wrong": [
+        "Klaun",
+        "Clowhn",
+        "Cluwn"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Collage",
+      "meaning": "Bild aus zusammengefügten Materialien oder Bildern",
+      "example": "Die ______ bestand aus Fotos, Stoff und Zeitungsausschnitten.",
+      "wrong": [
+        "Colage",
+        "Collaage",
+        "Kollasche"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Comic",
+      "meaning": "Bildergeschichte mit aufeinanderfolgenden Zeichnungen",
+      "example": "Im ______ rettete ein Faultier die Stadt.",
+      "wrong": [
+        "Commic",
+        "Comik",
+        "Comich"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Container",
+      "meaning": "Großer Behälter zum Lagern oder Transportieren",
+      "example": "Der Kran hob den ______ vom Frachtschiff.",
+      "wrong": [
+        "Kontäner",
+        "Contaner",
+        "Containerh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Detektiv",
+      "meaning": "Person, die Nachforschungen anstellt",
+      "example": "Der ______ folgte der Spur aus Kekskrümeln.",
+      "wrong": [
+        "Detecktiv",
+        "Detektief",
+        "Detektiev"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Dialog",
+      "meaning": "Gespräch zwischen zwei oder mehreren Personen",
+      "example": "Der ______ zwischen den Figuren dauerte zwei Minuten.",
+      "wrong": [
+        "Diallog",
+        "Diahlog",
+        "Dialohg"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Dino",
+      "meaning": "Kurzform für Dinosaurier",
+      "example": "Der kleine ______ auf dem Buchcover trug eine Brille.",
+      "wrong": [
+        "Dihno",
+        "Dinno",
+        "Dieno"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Dschungel",
+      "meaning": "Dicht bewachsener tropischer Wald",
+      "example": "Im ______ hörten wir Tiere, die wir nicht sehen konnten.",
+      "wrong": [
+        "Dschungle",
+        "Dschungelh",
+        "Dschungell"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Duell",
+      "meaning": "Wettkampf oder Auseinandersetzung zwischen zwei Gegnern",
+      "example": "Im ______ beantworteten beide dieselben Fragen.",
+      "wrong": [
+        "Duehl",
+        "Duellh",
+        "Dueell"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Echo",
+      "meaning": "Zurückgeworfener Schall",
+      "example": "Unser Ruf kam als ______ von der Felswand zurück.",
+      "wrong": [
+        "Ekcho",
+        "Echoh",
+        "Echho"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Eklipse",
+      "meaning": "Verfinsterung eines Himmelskörpers durch einen anderen",
+      "example": "Bei dieser ______ lag ein Teil des Mondes im Erdschatten.",
+      "wrong": [
+        "Ecklipse",
+        "Eklippse",
+        "Eklipseh"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Element",
+      "meaning": "Grundbestandteil eines Ganzen oder chemischer Grundstoff",
+      "example": "Sauerstoff ist ein chemisches ______.",
+      "wrong": [
+        "Ellement",
+        "Elehment",
+        "Elemennt"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Energie",
+      "meaning": "Fähigkeit, Arbeit zu verrichten oder Wärme abzugeben",
+      "example": "Die Solarzellen lieferten ______ für das Boot.",
+      "wrong": [
+        "Energihe",
+        "Ennergie",
+        "Enerjie"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Experiment",
+      "meaning": "Geplanter Versuch zur Prüfung einer Vermutung",
+      "example": "Beim ______ fanden wir heraus, welches Papier am meisten trägt.",
+      "wrong": [
+        "Exsperiment",
+        "Experimenth",
+        "Experimment"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Expedition",
+      "meaning": "Reise mit einem besonderen Forschungs- oder Erkundungsziel",
+      "example": "Die ______ suchte nach einer seltenen Qualle.",
+      "wrong": [
+        "Expeditzion",
+        "Exspedizion",
+        "Expedietion"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Festival",
+      "meaning": "Veranstaltung mit mehreren Aufführungen oder Programmpunkten",
+      "example": "Beim ______ spielten sechs Bands auf zwei Bühnen.",
+      "wrong": [
+        "Festifal",
+        "Festivall",
+        "Festieval"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Finale",
+      "meaning": "Entscheidende Schlussrunde eines Wettbewerbs",
+      "example": "Im ______ traten die beiden besten Teams an.",
+      "wrong": [
+        "Finahle",
+        "Finalle",
+        "Finaleh"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Flamingo",
+      "meaning": "Langbeiniger Wasservogel mit oft rosafarbenem Gefieder",
+      "example": "Der ______ stand auf einem Bein im flachen Wasser.",
+      "wrong": [
+        "Flamingoh",
+        "Flammingo",
+        "Flamiengo"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Fossil",
+      "meaning": "Erhaltener Rest oder Abdruck eines Lebewesens aus früherer Erdzeit",
+      "example": "Das ______ im Stein sah aus wie eine Muschel.",
+      "wrong": [
+        "Fosil",
+        "Fossiel",
+        "Fossihl"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Galaxie",
+      "meaning": "Sehr große Ansammlung von Sternen, Gas und Staub",
+      "example": "Die Milchstraße ist eine ______.",
+      "wrong": [
+        "Galaksie",
+        "Galaxieh",
+        "Gallaxie"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Garage",
+      "meaning": "Gebäude oder Raum zum Abstellen von Fahrzeugen",
+      "example": "In der ______ stehen zwei Fahrräder und ein Roller.",
+      "wrong": [
+        "Garasche",
+        "Garaage",
+        "Garrage"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Geysir",
+      "meaning": "Heiße Quelle, die zeitweise Wasser und Dampf herausschleudert",
+      "example": "Plötzlich schoss Wasser aus dem ______.",
+      "wrong": [
+        "Geisyr",
+        "Geyssir",
+        "Geysier"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Geografie",
+      "meaning": "Wissenschaft von der Erdoberfläche und ihren räumlichen Zusammenhängen",
+      "example": "In ______ verglichen wir verschiedene Klimazonen.",
+      "wrong": [
+        "Geografieh",
+        "Geograffie",
+        "Gehografie"
+      ],
+      "difficulty": 2,
+      "aliases": [
+        "Geographie"
+      ],
+      "questions": []
+    },
+    {
+      "word": "Giraffe",
+      "meaning": "Afrikanisches Säugetier mit sehr langem Hals",
+      "example": "Die ______ erreichte die hohen Blätter mühelos.",
+      "wrong": [
+        "Girafe",
+        "Girraffe",
+        "Girrafe"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Gondel",
+      "meaning": "Kleines Boot oder Kabine einer Seilbahn",
+      "example": "Die ______ schwebte über das Tal.",
+      "wrong": [
+        "Gondelh",
+        "Gondell",
+        "Gohndel"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Grammatik",
+      "meaning": "Regeln für den Aufbau einer Sprache",
+      "example": "Mit der ______ erklärten wir die Reihenfolge der Wörter.",
+      "wrong": [
+        "Gramatik",
+        "Grammatick",
+        "Grammatikh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Hologramm",
+      "meaning": "Aufzeichnung, die bei Beleuchtung ein räumliches Bild erzeugt",
+      "example": "Das ______ zeigte einen scheinbar schwebenden Würfel.",
+      "wrong": [
+        "Hologram",
+        "Hologrammh",
+        "Hollogramm"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Hypothese",
+      "meaning": "Überprüfbare Annahme oder Vermutung",
+      "example": "Unsere ______ lautete, dass der dunkle Becher wärmer wird.",
+      "wrong": [
+        "Hypotese",
+        "Hypothehse",
+        "Hypothesse"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Illusion",
+      "meaning": "Täuschung der Wahrnehmung oder trügerische Vorstellung",
+      "example": "Das Muster erzeugte die ______, dass sich das Bild bewegte.",
+      "wrong": [
+        "Ilusion",
+        "Illuzion",
+        "Illusionh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Imitation",
+      "meaning": "Nachahmung",
+      "example": "Ihre ______ eines quakenden Frosches war verblüffend.",
+      "wrong": [
+        "Immitation",
+        "Imitatzion",
+        "Imitationh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Improvisation",
+      "meaning": "Spontanes Gestalten oder Handeln ohne vorherigen Plan",
+      "example": "Als das Mikrofon ausfiel, half eine kurze ______.",
+      "wrong": [
+        "Improvisatzion",
+        "Improvisationh",
+        "Improvisazion"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Instrument",
+      "meaning": "Gerät für eine bestimmte Aufgabe oder zum Musizieren",
+      "example": "Die Trompete ist ein lautes ______.",
+      "wrong": [
+        "Instruhment",
+        "Instrumenth",
+        "Instrumentt"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Invasion",
+      "meaning": "Eindringen in ein fremdes Gebiet",
+      "example": "Im Comic begann die ______ der winzigen Marsbewohner.",
+      "wrong": [
+        "Invassion",
+        "Invazion",
+        "Invasionh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Jongleur",
+      "meaning": "Person, die mehrere Gegenstände durch Werfen und Fangen in Bewegung hält",
+      "example": "Der ______ warf drei Keulen in die Luft.",
+      "wrong": [
+        "Jonglör",
+        "Jongleurr",
+        "Jonggleur"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Kaktus",
+      "meaning": "Pflanze aus einer Familie meist stachliger Wasserspeicherpflanzen",
+      "example": "Der ______ braucht nur selten Wasser.",
+      "wrong": [
+        "Kacktus",
+        "Kaktuss",
+        "Kaktush"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Kamera",
+      "meaning": "Gerät zum Aufnehmen von Bildern oder Videos",
+      "example": "Die ______ filmte den Sprung ins Wasser.",
+      "wrong": [
+        "Kammera",
+        "Kamehra",
+        "Cammera"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Kapitän",
+      "meaning": "Person, die ein Schiff führt oder eine Mannschaft anführt",
+      "example": "Der ______ steuerte das Schiff in den Hafen.",
+      "wrong": [
+        "Kappitän",
+        "Kapitähn",
+        "Kapietän"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Karikatur",
+      "meaning": "Übertreibende Darstellung, die Merkmale oder Zustände hervorhebt",
+      "example": "Die ______ zeigte einen Politiker mit riesigen Ohren.",
+      "wrong": [
+        "Karickatur",
+        "Karrikatur",
+        "Karikaturh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Katapult",
+      "meaning": "Vorrichtung, die Gegenstände mit großer Kraft fortschleudert",
+      "example": "Das gebastelte ______ schleuderte einen Papierball.",
+      "wrong": [
+        "Kattapult",
+        "Katapullt",
+        "Katapulth"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Komet",
+      "meaning": "Himmelskörper aus Eis, Staub und Gestein, der nahe der Sonne einen Schweif entwickeln kann",
+      "example": "Der ______ war am Nachthimmel zu sehen.",
+      "wrong": [
+        "Kommet",
+        "Komeht",
+        "Kometh"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Kompass",
+      "meaning": "Gerät zur Bestimmung der Himmelsrichtungen",
+      "example": "Mit dem ______ fanden wir den Weg nach Norden.",
+      "wrong": [
+        "Kompaz",
+        "Kompahs",
+        "Kompassh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Krokodil",
+      "meaning": "Großes Reptil, das vor allem im und am Wasser lebt",
+      "example": "Das ______ lag mit offenem Maul am Flussufer.",
+      "wrong": [
+        "Krockodil",
+        "Krokodiel",
+        "Krokodilh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Labyrinth",
+      "meaning": "Anlage mit vielen verschlungenen Wegen",
+      "example": "Im ______ aus Hecken nahmen wir dreimal dieselbe Abzweigung.",
+      "wrong": [
+        "Labyrynth",
+        "Labyrint",
+        "Labürinth"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Lawine",
+      "meaning": "Plötzlich abrutschende Masse aus Schnee oder anderem Material",
+      "example": "Die ______ raste den steilen Hang hinab.",
+      "wrong": [
+        "Lawinne",
+        "Lawihne",
+        "Lavine"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Legende",
+      "meaning": "Überlieferte Geschichte oder Erklärung von Zeichen auf einer Karte",
+      "example": "In der ______ stand, wofür der blaue Kreis steht.",
+      "wrong": [
+        "Legände",
+        "Legendeh",
+        "Leggende"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Limonade",
+      "meaning": "Erfrischungsgetränk, meist mit Fruchtgeschmack und Zucker",
+      "example": "Die ______ schmeckte nach Zitrone und Minze.",
+      "wrong": [
+        "Limonahde",
+        "Limmonade",
+        "Limonadeh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Magnet",
+      "meaning": "Körper, der beispielsweise Eisen anziehen kann",
+      "example": "Der ______ zog die Büroklammern an.",
+      "wrong": [
+        "Magneht",
+        "Magnett",
+        "Magneth"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Mikrofon",
+      "meaning": "Gerät, das Schall in elektrische Signale umwandelt",
+      "example": "Im ______ hörte man das Rascheln der Chipstüte.",
+      "wrong": [
+        "Mikrofoon",
+        "Microfon",
+        "Mikrofohn"
+      ],
+      "difficulty": 2,
+      "aliases": [
+        "Mikrophon"
+      ],
+      "questions": []
+    },
+    {
+      "word": "Mikroskop",
+      "meaning": "Gerät, mit dem sich sehr kleine Dinge vergrößert betrachten lassen",
+      "example": "Unter dem ______ entdeckten wir Zellen.",
+      "wrong": [
+        "Mikroskopp",
+        "Mikroscop",
+        "Mickroskop"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Mission",
+      "meaning": "Besonderer Auftrag mit einem bestimmten Ziel",
+      "example": "Die ______ bestand darin, das verschwundene Rezept zu finden.",
+      "wrong": [
+        "Mision",
+        "Missionh",
+        "Miszion"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Museum",
+      "meaning": "Einrichtung, die Sammlungen bewahrt und ausstellt",
+      "example": "Im ______ sahen wir ein riesiges Dinosaurierskelett.",
+      "wrong": [
+        "Musehum",
+        "Museumh",
+        "Museumm"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
+    },
+    {
+      "word": "Orakel",
+      "meaning": "Weissagung oder Stelle, an der eine Weissagung erteilt wird",
+      "example": "Die Figur fragte das ______ nach ihrer Zukunft.",
+      "wrong": [
+        "Ohrakel",
+        "Orackel",
+        "Orakelh"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": []
     }
   ]
 }
