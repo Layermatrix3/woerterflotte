@@ -1,0 +1,438 @@
+{
+  "words": [
+    {
+      "word": "Prophet",
+      "meaning": "Person, die eine göttliche Botschaft verkündet",
+      "example": "Der ______ sprach zu den Menschen auf dem Marktplatz.",
+      "wrong": [
+        "Profet",
+        "Profeet",
+        "Propheet"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Person, die religiöse Schriften in eine andere Sprache übersetzt",
+        "Person, die eine Pilgerreise zu einem heiligen Ort macht",
+        "Person, die eine religiöse Gemeinde musikalisch begleitet"
+      ]
+    },
+    {
+      "word": "Chor",
+      "meaning": "Gruppe von Menschen, die gemeinsam singt",
+      "example": "Der ______ probt für das Konzert im Rathaus.",
+      "wrong": [
+        "Kor",
+        "Khoor",
+        "Chohr"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Gruppe, die gemeinsam Instrumente spielt",
+        "Gruppe, die gemeinsam ein Schauspiel aufführt",
+        "Gruppe, die gemeinsam zu einer Choreografie tanzt"
+      ]
+    },
+    {
+      "word": "Thermometer",
+      "meaning": "Gerät zum Messen der Temperatur",
+      "example": "Mit einem ______ misst man die Temperatur.",
+      "wrong": [
+        "Termometer",
+        "Thermomether",
+        "Thermomeeter"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Gerät zum Messen des Luftdrucks",
+        "Gerät zum Messen der Uhrzeit",
+        "Gerät zum Messen der Luftfeuchtigkeit"
+      ]
+    },
+    {
+      "word": "Diskothek",
+      "meaning": "Lokal zum Tanzen zu aufgelegter Musik",
+      "example": "Die ______ öffnet am Samstag erst um zehn Uhr.",
+      "wrong": [
+        "Diskotek",
+        "Discohteck",
+        "Diskhotek"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Lokal für Vorführungen von Kinofilmen",
+        "Lokal, in dem vor allem Speisen serviert werden",
+        "Geschäft, das Musikinstrumente verkauft"
+      ]
+    },
+    {
+      "word": "Chrom",
+      "meaning": "Glänzendes metallisches Element",
+      "example": "Die Armatur ist mit ______ überzogen.",
+      "wrong": [
+        "Krom",
+        "Chrohm",
+        "Cromm"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Glänzende Legierung aus Kupfer und Zink",
+        "Durchsichtiger Kunststoff für Beschichtungen",
+        "Hartes Mineral aus Siliciumdioxid"
+      ]
+    },
+    {
+      "word": "Phase",
+      "meaning": "Zeitabschnitt innerhalb einer Entwicklung",
+      "example": "In der ersten ______ sammeln wir Ideen.",
+      "wrong": [
+        "Fase",
+        "Phahse",
+        "Phaase"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Zeitpunkt, an dem eine Entwicklung endet",
+        "Ursache, die eine Veränderung auslöst",
+        "Ergebnis nach Abschluss einer Entwicklung"
+      ]
+    },
+    {
+      "word": "Katastrophe",
+      "meaning": "Schweres Unglück mit großen Folgen",
+      "example": "Das Erdbeben war eine ______ für die ganze Region.",
+      "wrong": [
+        "Katastrofe",
+        "Katastropfe",
+        "Katastrohpe"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Vorübergehende Unterbrechung eines Ablaufs",
+        "Verwechslung zweier ähnlicher Dinge",
+        "Warnung vor einem möglichen Unglück"
+      ]
+    },
+    {
+      "word": "Charakter",
+      "meaning": "Typische Eigenschaften einer Person",
+      "example": "Ihre Geduld verrät viel über ihren ______.",
+      "wrong": [
+        "Karackter",
+        "Charackter",
+        "Charahkter"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Schriftbild einer Handschrift",
+        "Augenblickliche Stimmung einer Person",
+        "Herkunft einer Person"
+      ]
+    },
+    {
+      "word": "Paragraph",
+      "meaning": "Nummerierter Abschnitt eines Gesetzes oder Vertrags",
+      "example": "Der ______ regelt, wann der Vertrag endet.",
+      "wrong": [
+        "Paragrafh",
+        "Parragraf",
+        "Paragrahp"
+      ],
+      "difficulty": 2,
+      "aliases": [
+        "Paragraf"
+      ],
+      "questions": [],
+      "meaningChoices": [
+        "Verzeichnis der Überschriften eines Buches",
+        "Anmerkung am unteren Rand einer Seite",
+        "Zusammenfassung eines längeren Textes"
+      ]
+    },
+    {
+      "word": "Christentum",
+      "meaning": "Religion, die auf dem Leben und der Lehre Jesu beruht",
+      "example": "Das ______ entstand vor etwa zweitausend Jahren.",
+      "wrong": [
+        "Kristentum",
+        "Chriestentum",
+        "Christendum"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Weltanschauung der antiken Stoiker",
+        "Religion, in der der Koran die zentrale Schrift ist",
+        "Religion, deren Lehre auf Siddhartha Gautama zurückgeht"
+      ]
+    },
+    {
+      "word": "Alphabet",
+      "meaning": "Vollständige Folge der Buchstaben einer Schrift",
+      "example": "Im deutschen ______ steht B nach A.",
+      "wrong": [
+        "Alfabet",
+        "Allphabet",
+        "Alphabett"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Verzeichnis der Wörter einer Sprache",
+        "Sammlung der Satzzeichen einer Schrift",
+        "Geordnete Folge der Ziffern eines Zahlensystems"
+      ]
+    },
+    {
+      "word": "Triumph",
+      "meaning": "Großer Erfolg oder glänzender Sieg",
+      "example": "Der Gewinn der Meisterschaft war ein ______.",
+      "wrong": [
+        "Triumf",
+        "Thriumph",
+        "Triumpf"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Knappe Niederlage nach einem Wettkampf",
+        "Ausgeglichener Spielstand am Ende",
+        "Vorbereitung auf einen Wettkampf"
+      ]
+    },
+    {
+      "word": "Physik",
+      "meaning": "Naturwissenschaft, die unter anderem Kräfte und Energie untersucht",
+      "example": "Im Fach ______ bauen wir einen einfachen Stromkreis.",
+      "wrong": [
+        "Fysik",
+        "Physick",
+        "Phüsik"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Wissenschaft vom Aufbau und Verhalten von Lebewesen",
+        "Wissenschaft von Stoffen und ihren chemischen Reaktionen",
+        "Wissenschaft von Sprache und Grammatik"
+      ]
+    },
+    {
+      "word": "Thema",
+      "meaning": "Gegenstand eines Gesprächs oder Textes",
+      "example": "Unser nächstes ______ ist Klimaschutz.",
+      "wrong": [
+        "Tehma",
+        "Themma",
+        "Themah"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Kurze Pause in einem Gespräch",
+        "Begründung für eine Behauptung",
+        "Unterschrift am Ende eines Briefs"
+      ]
+    },
+    {
+      "word": "Athlet",
+      "meaning": "Sportler, der trainiert und an Wettkämpfen teilnimmt",
+      "example": "Der ______ überquerte als Erster die Ziellinie.",
+      "wrong": [
+        "Atlet",
+        "Athlett",
+        "Atleht"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Person, die einen Sportwettkampf kommentiert",
+        "Person, die bei einem Wettkampf die Regeln überwacht",
+        "Person, die beim Training Übungen anleitet"
+      ]
+    },
+    {
+      "word": "Theke",
+      "meaning": "Erhöhter Tisch, an dem Waren ausgegeben oder verkauft werden",
+      "example": "Das Brot liegt hinter der ______.",
+      "wrong": [
+        "Teke",
+        "Thecke",
+        "Thehke"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Geschlossener Schrank zum Lagern von Waren",
+        "Regal zum Aufstellen von Büchern",
+        "Gerät zum Wiegen von Waren"
+      ]
+    },
+    {
+      "word": "Theater",
+      "meaning": "Bühne oder Gebäude für Schauspielaufführungen",
+      "example": "Morgen führt das ______ ein neues Stück auf.",
+      "wrong": [
+        "Teater",
+        "Theather",
+        "Theatter"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Gebäude zur Aufbewahrung historischer Gegenstände",
+        "Gebäude, in dem Filme auf einer Leinwand gezeigt werden",
+        "Gebäude zum Ausleihen von Büchern"
+      ]
+    },
+    {
+      "word": "Strophe",
+      "meaning": "Gruppe von Versen in einem Gedicht oder Lied",
+      "example": "Die erste ______ des Liedes hat vier Zeilen.",
+      "wrong": [
+        "Strofe",
+        "Stropfe",
+        "Strophhe"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Einzelne Zeile eines Gedichts",
+        "Titel eines Gedichts oder Liedes",
+        "Rhythmisches Schema eines Verses"
+      ]
+    },
+    {
+      "word": "Theorie",
+      "meaning": "System von Annahmen, das Zusammenhänge erklärt",
+      "example": "Die Forscherin prüft ihre ______ mit einem Experiment.",
+      "wrong": [
+        "Teorie",
+        "Theorrie",
+        "Theorieh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Einzelne Messung bei einem Experiment",
+        "Gerät zur Durchführung eines Experiments",
+        "Auflistung beobachteter Werte ohne Erklärung"
+      ]
+    },
+    {
+      "word": "Atmosphäre",
+      "meaning": "Gashülle eines Himmelskörpers; auch die Stimmung an einem Ort",
+      "example": "Wolken entstehen in der ______ der Erde.",
+      "wrong": [
+        "Atmosfäre",
+        "Atmossphäre",
+        "Atmospfäre"
+      ],
+      "difficulty": 3,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Feste Oberfläche eines Himmelskörpers",
+        "Flüssige Schicht unter der Erdkruste",
+        "Bahn, auf der sich ein Himmelskörper bewegt"
+      ]
+    },
+    {
+      "word": "Chaos",
+      "meaning": "Zustand extremer Unordnung",
+      "example": "Nach dem Umzug herrschte in der Küche ______.",
+      "wrong": [
+        "Kaos",
+        "Chaaos",
+        "Chaohs"
+      ],
+      "difficulty": 1,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Planmäßige Anordnung von Gegenständen",
+        "Zustand vollständiger Ruhe",
+        "Genau festgelegter Ablauf"
+      ]
+    },
+    {
+      "word": "Methode",
+      "meaning": "Planmäßige Vorgehensweise zum Erreichen eines Ziels",
+      "example": "Diese ______ hilft uns beim Sortieren der Daten.",
+      "wrong": [
+        "Metode",
+        "Methodde",
+        "Mehtode"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Ziel, das man bei der Arbeit erreichen möchte",
+        "Ergebnis, das am Ende einer Arbeit vorliegt",
+        "Hindernis, das bei der Arbeit auftritt"
+      ]
+    },
+    {
+      "word": "Sympathie",
+      "meaning": "Gefühl der Zuneigung oder des Wohlwollens",
+      "example": "Er empfand sofort ______ für seine neue Mitschülerin.",
+      "wrong": [
+        "Sympatie",
+        "Sümpathie",
+        "Sympatieh"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Gefühl von Neid auf eine andere Person",
+        "Anhaltende Abneigung gegen eine andere Person",
+        "Gleichgültigkeit gegenüber einer anderen Person"
+      ]
+    },
+    {
+      "word": "Chronik",
+      "meaning": "Bericht, der Ereignisse in zeitlicher Reihenfolge festhält",
+      "example": "Die ______ des Dorfes beginnt im Mittelalter.",
+      "wrong": [
+        "Kronick",
+        "Chronick",
+        "Chrohnick"
+      ],
+      "difficulty": 2,
+      "aliases": [],
+      "questions": [],
+      "meaningChoices": [
+        "Sammlung von Rezepten und Einkaufstipps",
+        "Verzeichnis der Straßen einer Stadt",
+        "Wörterbuch mit alphabetisch geordneten Einträgen"
+      ]
+    }
+  ]
+}

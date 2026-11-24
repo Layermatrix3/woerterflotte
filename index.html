@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#061522">
+  <meta name="description" content="Fremdwörter lernen und Schiffe versenken – allein oder zu zweit.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Wörterflotte · Lerne. Ziele. Versenke.</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./assets/radar.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/touch.png">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="top">
+    <button id="home" class="brand" type="button"><img src="./assets/radar.svg" alt=""> <span>WÖRTERFLOTTE</span></button>
+    <div class="top-right"><span id="connection" class="connection">Lokales Spiel verfügbar</span><button id="mute" class="small" type="button" aria-label="Ton umschalten">Ton an</button></div>
+  </header>
+  <main id="app"><p>Wörterflotte lädt …</p></main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
