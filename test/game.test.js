@@ -86,6 +86,7 @@ test('Treffer, Versenkung, Sieger und Ergebnisstatistik', () => {
   assert.equal(game.event.sunk[0], 'Chor');
   assert.equal(game.p[0].shots[0], 'sunk');
   assert.equal(game.p[0].shots[5], 'miss');
+  assert.deepEqual(game.p[0].wrecks.map(ship => ship.cells), [[0,1],[8,14]]);
   const player = summary(game, 0);
   assert.equal(player.right, 5);
   assert.equal(player.sunk, 2);
@@ -157,7 +158,7 @@ test('Service Worker enthält alle lokalen Laufzeitressourcen und GitHub-Unterpf
   const read = path => readFileSync(new URL(path, root), 'utf8');
   const manifest = JSON.parse(read('manifest.json'));
   for (const path of [manifest.start_url, manifest.scope, ...manifest.icons.map(icon => icon.src)]) assert.ok(path.startsWith('./'));
-  const scripts = ['app','ui','board','game','questions','peer-online','pages','sounds'];
+  const scripts = ['app','ui','board','game','questions','peer-online','battle-view','pages','sounds'];
   for (const name of scripts) {
     assert.ok(read('sw.js').includes("'" + name + "'"));
     for (const [, imported] of read('js/' + name + '.js').matchAll(/from '\.\/(.+?)'/g)) assert.ok(read('js/' + imported));

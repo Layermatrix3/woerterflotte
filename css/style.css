@@ -205,3 +205,46 @@ fieldset button { margin-top:.65rem; }
 .menu-button:nth-child(3n) .menu-icon { color:#d5c3ff; background:#433367; }
 .menu-button { transition:border-color .16s,background .16s; }
 @media (max-width:480px) { .hero-copy { background:none; } .hero .discover { text-align:left; } }
+
+.turn-banner { display:grid; gap:.18rem; padding:.7rem 1rem; border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:12px; background:var(--surface); }
+.turn-banner strong { font-size:clamp(1.05rem,3vw,1.35rem); }
+.turn-banner span { color:var(--muted); }
+.turn-banner.turn-other { border-left-color:var(--orange); }
+.board-heading { display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem .55rem; margin-bottom:.38rem; }
+.board-heading h3 { margin:0; }
+.board-heading span { font-size:.86rem; color:var(--muted); overflow-wrap:anywhere; }
+.board-panel.side-mine .board-heading h3 { color:var(--accent); }
+.board-panel.side-enemy .board-heading h3 { color:var(--orange); }
+.board-panel.board-active .board-grid { border-radius:8px; outline:2px solid var(--orange); outline-offset:3px; }
+.board-panel.board-active button.sea { border-color:#5890a7; }
+.watching-options { list-style:none; margin:0; padding:0; display:grid; gap:.36rem; }
+.watching-options li { border:1px dashed var(--border); border-radius:8px; padding:.42rem .57rem; color:var(--muted); }
+.watching-question .muted { margin:0; }
+.cell.ship { background:var(--sea); border-color:var(--border); }
+.cell-mark { position:relative; z-index:2; color:inherit; text-shadow:0 1px 3px #000b; }
+.cell.miss .cell-mark { text-shadow:none; }
+.hull { position:absolute; inset:18% -2%; border:1px solid #a8c9da; background:linear-gradient(#c4dae4,#7b98a9 48%,#496578 52%,#29465f); }
+.hull.horizontal.stern { inset-inline-start:8%; border-radius:24% 0 0 24%; }
+.hull.horizontal.bow { inset-inline-end:8%; clip-path:polygon(0 0,68% 0,100% 50%,68% 100%,0 100%); }
+.hull.vertical { inset:-2% 18%; background:linear-gradient(90deg,#c4dae4,#7b98a9 48%,#496578 52%,#29465f); }
+.hull.vertical.stern { inset-block-start:8%; border-radius:24% 24% 0 0; }
+.hull.vertical.bow { inset-block-end:8%; clip-path:polygon(0 0,100% 0,100% 68%,50% 100%,0 68%); }
+.hull.cabin::before { content:""; position:absolute; inset:21%; border-radius:3px; border:1px solid #d5faff; background:#4d728c; box-shadow:0 1px 2px #122836; }
+.cell.hit .hull { filter:sepia(.7) saturate(1.8); }
+.cell.sunk .hull { background:#623416; border-color:#ffc985; }
+.cell.sunk .cell-mark { color:#fff1cf; }
+.cell.incoming,.cell.radar-target { z-index:3; outline:2px solid #ffd06a; outline-offset:1px; }
+.cell.radar-target { outline-color:var(--accent); }
+.projectile { position:absolute; z-index:4; width:65%; height:24%; border-radius:50%; pointer-events:none; background:linear-gradient(90deg,transparent 0%,#ff7b32 43%,#fff5b4 86%); box-shadow:4px 0 9px #ff8a36; transform-origin:center; animation:projectile-in .48s cubic-bezier(.36,.03,.77,.71) both; }
+.cell.impact.hit::after,.cell.impact.sunk::after { z-index:4; inset:11%; border:0; border-radius:50%; background:radial-gradient(circle,#fff 8%,#ffce5a 34%,#ff7924 51%,transparent 72%); animation:ship-blast .65s ease-out both; }
+.cell.impact.miss::after { content:""; position:absolute; z-index:3; inset:20%; border:2px solid #b9f4ff; border-radius:50%; animation:impact .56s ease-out both; pointer-events:none; }
+@keyframes projectile-in {
+  from { transform:translate(-170%,-150%) rotate(35deg) scale(1.6); opacity:0; }
+  20% { opacity:1; }
+  to { transform:translate(0,0) rotate(35deg) scale(.8); }
+}
+@keyframes ship-blast {
+  from { opacity:.9; transform:scale(.3); }
+  23% { opacity:1; transform:scale(1.35); }
+  to { opacity:0; transform:scale(2.4); }
+}

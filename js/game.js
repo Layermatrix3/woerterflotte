@@ -97,6 +97,7 @@ export function transition(previous, config, pool, actor, action, now, board, re
           ship.cells.forEach(index => { shots[index] = 'sunk'; });
           stats.sunk++;
           sunk.push(ship.name);
+          (attacker.wrecks ||= []).push({name:ship.name,cells:ship.cells});
         }
         if (sunk.length) kind = 'sunk';
       }

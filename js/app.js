@@ -5,6 +5,7 @@ import {powers, initialGame, transition, summary, cellAvailable} from './game.js
 import {connect, seed, validCode} from './peer-online.js';
 import {soundsPage, learnPage, teacherPage} from './pages.js';
 import {sound, soundSettings} from './sounds.js';
+import {turnDetails, hullTiles} from './battle-view.js';
 
 const app = document.querySelector('#app');
 const toast = document.querySelector('#toast');
@@ -36,6 +37,7 @@ let resolveBusy = false;
 let aiTimer;
 let toastTimer;
 let feedback;
+let resultsAfter = 0;
 let learnFilter;
 let resume = read('resume', null);
 if (!validCode(resume?.code)) resume = null;
@@ -244,7 +246,15 @@ function observe() {
       if (game.revision > 0) notify(label + detail);
     }
   }
-  if (game.phase === 'over') sound(game.winner === role() ? 'win' : 'lose');
+  if (game.phase === 'over') {
+    resultsAfter = performance.now() + 850;
+    setTimeout(() => {
+      if (page === 'battle' && seenGame === key) {
+        sound(game.winner === role() ? 'win' : 'lose');
+        render();
+      }
+    }, 860);
+  }
 }
 
 async function move(type, details = {}) {
@@ -280,12 +290,12 @@ function schedule() {
   if (!game || page !== 'battle' || game.phase === 'over') return;
   if (code) {
     if (online.online && game.phase === 'pending' && game.turn !== role() && board.length) {
-      aiTimer = setTimeout(() => move('resolve'), 220);
+      aiTimer = setTimeout(() => move('resolve'), 490);
     }
     return;
   }
   if (game.phase === 'pending') {
-    aiTimer = setTimeout(() => move('resolve', {actor:1 - game.turn}), 420);
+    aiTimer = setTimeout(() => move('resolve', {actor:1 - game.turn}), 490);
   } else if (game.turn === 1) {
     aiTimer = setTimeout(() => {
       if (game.phase === 'question') {
@@ -513,10 +523,10 @@ function place(cell) {
 }
 
 function grid(title, boardSize, options = {}) {
-  const {ships = [], shots = {}, interactive = false, handler, setup = false, impact} = options;
+  const {ships = [], shots = {}, interactive = false, handler, setup = false, impact, incoming, scan, side, subtitle} = options;
   const gridNode = el('div', {className:'board-grid'});
   gridNode.style.setProperty('--size', boardSize);
-  const own = new Map(ships.flatMap(ship => ship ? ship.cells.map((cell, index) => [cell, ship.letters?.[index] || '']) : []));
+  const own = hullTiles(ships, boardSize);
   gridNode.append(el('span', {className:'axis'}, ''));
   for (let column = 0; column < boardSize; column++) gridNode.append(el('span', {className:'axis'}, column + 1));
   for (let line = 0; line < boardSize; line++) {
@@ -525,14 +535,21 @@ function grid(title, boardSize, options = {}) {
       const index = line * boardSize + column;
       const shot = shots[index];
       const details = {hit:'Treffer',miss:'Fehlschuss',sunk:'Versenkt'}[shot] || (own.has(index) ? 'Eigenes Schiff' : 'Wasser');
-      const className = ['cell', shot || (own.has(index) ? 'ship' : 'sea'),
+      const tile = own.get(index);
+      const className = ['cell', shot || (tile ? 'ship' : 'sea'),
+        index === incoming ? (scan ? 'radar-target' : 'incoming') : '',
         index === impact ? 'impact' : '', setup && index === setupFocus ? 'selected-cell' : ''].join(' ');
       const props = {className, 'data-cell':index, ariaLabel:coordinates(index, boardSize) + ' · ' + details};
-      const content = shot ? {hit:'×', miss:'•', sunk:'✦'}[shot] : own.get(index) || '';
+      const content = [
+        tile ? el('span', {className:'hull ' + tile.direction + ' ' + tile.part + (tile.cabin ? ' cabin' : ''), ariaHidden:'true'}) : null,
+        el('span', {className:'cell-mark', ariaHidden:'true'}, shot ? {hit:'×', miss:'•', sunk:'✦'}[shot] : tile?.letter || ''),
+        index === incoming && !scan ? el('span', {className:'projectile', ariaHidden:'true'}) : null
+      ];
       gridNode.append(interactive && !shot ? button(content, () => handler(index), props) : el('div', {...props, role:'img'}, content));
     }
   }
-  return el('section', {className:'board-panel'}, el('h3', {}, title), gridNode);
+  return el('section', {className:'board-panel' + (side ? ' side-' + side : '') + (interactive && !setup ? ' board-active' : '')},
+    el('div', {className:'board-heading'}, el('h3', {}, title), subtitle ? el('span', {}, subtitle) : null), gridNode);
 }
 
 let drag;
@@ -563,6 +580,7 @@ function setupPage() {
   const settings = config();
   const locked = Boolean(code && (role() === 0 ? room.host.placed : room.guest.placed));
   const complete = specs.every((_, index) => Boolean(board[index]));
+  const opponentPlaced = Boolean(code && (role() === 0 ? room.guest?.placed : room.host.placed));
   const fleet = specs.map((spec, index) => button(el('span', {},
     el('strong', {}, spec.name), el('small', {}, spec.length + ' Felder' + (board[index] ? ' · platziert' : ''))), () => {
     selected = index;
@@ -580,8 +598,9 @@ function setupPage() {
   return section('Flotte positionieren',
     el('p', {className:'muted'}, locked ? 'Deine Flotte steht. Warte auf die andere Flotte.' :
       'Wähle ein Schiff und tippe auf sein Startfeld. Du kannst Schiffe auch direkt ins Raster ziehen.'),
+    code ? el('p', {className:'muted'}, names()[1 - role()] + (opponentPlaced ? ' ist bereit.' : ' platziert die Flotte.')) : null,
     code ? el('p', {id:'reconnecting', className:'notice', hidden:true}, 'Offline. Die Partie wird nach dem Verbinden fortgesetzt.') : null,
-    el('div', {className:'setup-layout'}, grid('Dein Flottenfeld', settings.size, {ships:board, interactive:!locked, handler:place, setup:true}),
+    el('div', {className:'setup-layout'}, grid('Deine Flotte', settings.size, {ships:board, interactive:!locked, handler:place, setup:true, side:'mine', subtitle:names()[role()]}),
       el('div', {className:'setup-controls'}, el('div', {className:'fleet'}, fleet),
         row(button(vertical ? 'Drehen · senkrecht' : 'Drehen · waagerecht', () => {
           vertical = !vertical;
@@ -635,7 +654,7 @@ function powerBar(game) {
 
 function battlePage() {
   const game = sharedGame();
-  if (game.phase === 'over') return resultsPage(game);
+  if (game.phase === 'over' && performance.now() >= resultsAfter) return resultsPage(game);
   const settings = config();
   const mine = role();
   const ownTurn = game.turn === mine;
@@ -644,11 +663,12 @@ function battlePage() {
   const labels = names();
   const stats = summary(game, mine);
   const timer = Math.max(0, Math.ceil((game.deadline - time()) / 1000));
-  const prompt = game.phase === 'pending' ? 'Schuss wird ausgewertet …' : !ownTurn ? 'Dein Gegner ist dran!' :
-    game.phase === 'target' ? game.power ? powers[game.power] + ' · Zielfeld wählen' :
-      'Feuer frei · ' + game.remaining + (game.remaining === 1 ? ' Schuss' : ' Schüsse') : 'Beantworte die Frage';
+  const activity = turnDetails(game,mine,labels,settings.size);
+  const target = game.phase === 'pending' ? game.pending.cell : undefined;
+  const scan = game.pending?.power === 'radar';
+  const timerLabel = () => el('span', {id:'timer', className:'timer' + (timer <= 5 ? ' urgent' : '')}, timer + ' s');
   let question;
-  if (game.phase === 'question' && ownTurn) {
+  if (game.phase === 'question') {
     question = getQuestion(pool, game.seed, game.index);
     if (game.joker) {
       const decoy = question.options.find(option => option !== question.answer);
@@ -658,7 +678,9 @@ function battlePage() {
   return el('div', {className:'battle'},
     el('div', {className:'battle-top'},
       el('div', {}, el('span', {className:'kicker'}, modes[settings.mode]), el('h2', {}, labels[mine] + ' gegen ' + labels[1 - mine])),
-      el('div', {className:'turn-label' + (ownTurn ? ' your-turn' : '')}, 'Zug ' + (game.index + 1) + ' · ' + labels[game.turn])),
+      el('div', {className:'turn-label' + (ownTurn ? ' your-turn' : '')}, 'Zug ' + (game.index + 1) + ' · ' + (ownTurn ? 'Du' : labels[game.turn]))),
+    el('div', {className:'turn-banner ' + (ownTurn ? 'turn-own' : 'turn-other'), role:'status'},
+      el('strong', {}, activity.title), el('span', {}, activity.instruction)),
     code ? el('p', {id:'reconnecting', className:'notice', hidden:true}, 'Verbindung unterbrochen. Online-Aktionen werden nach der Wiederverbindung freigegeben.') : null,
     code && !board.length ? el('p', {className:'notice'}, 'Deine Flotte fehlt im lokalen Speicher. Öffne die Partie auf dem Gerät, auf dem du sie platziert hast.') : null,
     el('div', {className:'metrics'},
@@ -667,19 +689,25 @@ function battlePage() {
         'Ø Antwortzeit ' + stats.average.toFixed(1).replace('.', ',') + ' s'].map(item => el('span', {}, item))),
     el('div', {className:'combat-layout'},
       el('div', {className:'boards'},
-        grid('Eigene Flotte', settings.size, {ships:board, shots:other.shots, impact:feedback?.actor !== mine ? feedback?.cell : undefined}),
-        grid('Gegnerisches Feld', settings.size, {shots:self.shots, impact:feedback?.actor === mine ? feedback?.cell : undefined,
+        grid('Deine Flotte', settings.size, {side:'mine', subtitle:labels[mine], ships:board, shots:other.shots,
+          incoming:ownTurn ? undefined : target, scan, impact:feedback?.actor !== mine ? feedback?.cell : undefined}),
+        grid('Gegnerische Flotte', settings.size, {side:'enemy', subtitle:labels[1 - mine], ships:self.wrecks, shots:self.shots,
+          incoming:ownTurn ? target : undefined, scan, impact:feedback?.actor === mine ? feedback?.cell : undefined,
           interactive:ownTurn && game.phase === 'target', handler:cell => {
             if (!cellAvailable(game, settings, cell)) return;
             sound('fire');
             move('fire', {cell});
           }})),
       el('aside', {className:'combat-controls'},
-        feedback && (feedback.actor === mine || !['right','wrong','timeout'].includes(feedback.kind))
-          ? el('div', {className:'battle-feedback ' + feedback.kind, role:'status'}, feedback.label) : null,
-        question ? questionBlock(question, value => move('answer', {value}),
-          el('span', {id:'timer', className:'timer' + (timer <= 5 ? ' urgent' : '')}, timer + ' s'))
-          : el('h3', {className:'battle-prompt'}, prompt),
+        feedback
+          ? el('div', {className:'battle-feedback ' + feedback.kind, role:'status'}, feedback.actor === mine ? feedback.label : feedback.kind === 'right' ? labels[1 - mine] + ' hat richtig geantwortet.' :
+            ['wrong','timeout'].includes(feedback.kind) ? labels[1 - mine] + ' hat keine richtige Antwort abgegeben. ' + feedback.label : feedback.label) : null,
+        question && ownTurn ? questionBlock(question, value => move('answer', {value}), timerLabel()) :
+          question ? el('div', {className:'question watching-question'},
+            row(el('span', {className:'kicker'}, 'Frage an ' + labels[1 - mine]), timerLabel()),
+            el('h3', {}, question.prompt),
+            question.options.length ? el('ul', {className:'watching-options'}, question.options.map(option => el('li', {}, option))) :
+              el('p', {className:'muted'}, 'Die Antwort wird eingetippt.')) : null,
         self.scan ? el('p', {className:'muted'}, 'Letzter Scan um ' + coordinates(self.scan.cell, settings.size) + ': ' + self.scan.count + ' ungetroffene Schiffsteile.') : null,
         powerBar(game))),
     row(code ? leaveButton() : null, backLink(goHome)));
