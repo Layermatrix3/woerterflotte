@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wörterflotte · Bunter Prototyp</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3efff;color:#24204c;font:16px/1.5 system-ui,sans-serif}main{max-width:1000px;margin:auto;padding:20px}a{color:inherit}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-weight:750}.hero{position:relative;overflow:hidden;padding:clamp(22px,6vw,58px);border-radius:26px;background:#563dcc;color:#fff;isolation:isolate}.hero:after{content:'';position:absolute;z-index:-1;right:-60px;bottom:-180px;width:440px;height:440px;border-radius:50%;background:#8065ed;box-shadow:0 0 0 28px #ffffff18,0 0 0 56px #ffffff15}.hero img{position:absolute;z-index:-1;right:3%;bottom:-10%;width:43%;opacity:.8}.hero p{margin:8px 0 0;color:#f5edff}h1{font-size:clamp(1.95rem,7vw,4.7rem);line-height:1;margin:0;letter-spacing:-.06em}h1 span{color:#ffdc76}.deck{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.card{background:white;border-radius:22px;padding:clamp(15px,3vw,26px);box-shadow:0 10px 24px #44319516;min-width:0}h2{font-size:1.35rem;margin:0 0 8px}p{margin:0 0 14px}.question{min-height:54px}.answers{display:grid;gap:8px}button{font:inherit;font-weight:740;cursor:pointer;border:0;border-radius:12px;min-height:44px;padding:8px 12px;color:#24204c;background:#eee7ff;touch-action:manipulation}button:focus-visible,a:focus-visible{outline:3px solid #553acb;outline-offset:3px}button:disabled{cursor:default}.answers button{text-align:left}.answers button:nth-child(2){background:#ffe5ef}.answers button:nth-child(3){background:#d6f7ed}.answers button:nth-child(4){background:#fff0c1}.answers button:disabled{opacity:.55}.answers button.good{background:#b4edcf;opacity:1}.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.grid button{aspect-ratio:1;background:#c9ecff;color:#163d67;font-size:1.25rem;padding:0}.grid button:enabled{background:#86daff}.grid .hit{background:#ff96b4;color:#552044}.grid .miss{background:#e5e9f9}.status{background:#f0eaff;border-radius:10px;padding:8px 12px;margin:12px 0;min-height:41px}.status.ok{background:#c9f5df}.status.bad{background:#ffe4ec}.reset{background:#ffdc76}.score{color:#554b78}@media(max-width:630px){.deck{grid-template-columns:1fr}.hero img{opacity:.45}.hero{min-height:130px}}
+</style>
+</head>
+<body><main>
+<header><span>Spielbarer Farbprototyp</span><a href="../">Zum Hauptspiel</a></header>
+<section class="hero"><img src="../assets/ship.svg" alt=""><h1>Wörter<span>flotte</span></h1><p>Lerne. Ziele. Versenke.</p></section>
+<div class="deck"><section class="card"><h2>Fremdwörter-Duell</h2><p id="question" class="question"></p><div id="answers" class="answers"></div><p class="status" id="status" role="status">Eine richtige Antwort schaltet einen Schuss frei.</p><button id="reset" class="reset">Neu starten</button></section>
+<section class="card"><h2>Gegnerisches Feld</h2><p id="score" class="score"></p><div id="grid" class="grid" aria-label="Gegnerisches Spielfeld"></div></section></div>
+</main>
+<script type="module">
+const quiz=[
+['Was bedeutet „Athlet“?','Sportler','Musiker','Schauspieler','Wissenschaftler'],
+['Welche Schreibweise ist richtig?','Atmosphäre','Atmosfäre','Atmossphäre','Atmospfäre'],
+['Womit misst du die Temperatur?','Thermometer','Barometer','Kompass','Stoppuhr'],
+['Was ist eine Strophe?','Eine Gruppe von Versen','Ein einzelner Buchstabe','Ein Satzzeichen','Der Titel eines Liedes'],
+['Was bedeutet „Chronik“?','Bericht in zeitlicher Reihenfolge','Sammlung von Rezepten','Verzeichnis von Straßen','Alphabetische Wortliste'],
+['Was bedeutet „Methode“?','Planmäßige Vorgehensweise','Unerwartetes Hindernis','Ergebnis einer Messung','Pause im Ablauf']
+];
+const find=id=>document.getElementById(id);
+let index, armed, fleet, shots;
+function shuffle(list){for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]]}return list}
+function status(text,kind=''){find('status').textContent=text;find('status').className='status '+kind}
+function question(){
+const [prompt,correct,...wrong]=quiz[index++%quiz.length];
+find('question').textContent=prompt;
+find('answers').replaceChildren(...shuffle([correct,...wrong]).map(answer=>{
+const button=document.createElement('button');button.textContent=answer;
+button.onclick=()=>{
+if(answer!==correct){status('Die richtige Antwort lautet „'+correct+'“. Nächste Frage!','bad');question();return}
+armed=true;status('Richtig! Wähle ein freies Feld.','ok');[...find('answers').children].forEach(option=>option.disabled=true);button.classList.add('good');board();
+};return button}));
+}
+function board(){
+const hits=[...shots.values()].filter(Boolean).length;
+find('score').textContent=hits+' von '+fleet.size+' Schiffsteilen getroffen';
+find('grid').replaceChildren(...Array.from({length:25},(_,cell)=>{
+const b=document.createElement('button'),coord='ABCDE'[Math.floor(cell/5)]+(cell%5+1),hit=shots.get(cell);
+b.disabled=!armed||shots.has(cell);b.textContent=shots.has(cell)?hit?'✦':'·':coord;
+b.className=shots.has(cell)?hit?'hit':'miss':'';b.setAttribute('aria-label',coord+(shots.has(cell)?hit?' Treffer':' Wasser':''));
+b.onclick=()=>{
+armed=false;const hit=fleet.has(cell);shots.set(cell,hit);board();
+if([...fleet].every(part=>shots.get(part))){status('Sieg! Du hast die Flotte versenkt.','ok');return}
+status(hit?'Treffer! Beantworte die nächste Frage.':'Wasser! Beantworte die nächste Frage.',hit?'ok':'');question();
+};return b;
+}));
+}
+function reset(){
+index=0;armed=false;shots=new Map();const row=Math.floor(Math.random()*5)*5,start=row+Math.floor(Math.random()*3);
+fleet=new Set([start,start+1,start+2]);question();board();status('Eine richtige Antwort schaltet einen Schuss frei.');
+}
+find('reset').onclick=reset;reset();
+</script>
+</body></html>
