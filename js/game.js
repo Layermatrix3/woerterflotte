@@ -27,7 +27,38 @@ export function cellAvailable(game, config, cell) {
   return Number.isInteger(cell) && cell >= 0 && cell < config.size ** 2 && !game.p[game.turn].shots?.[cell];
 }
 
-export function transition(previous, config, pool, actor, action, now, board) {
+export function battleReport(game, config, board) {
+  if (game?.phase !== 'pending' || !board?.length) return;
+  const {cell,power} = game.pending;
+  const {shots = {}} = game.p[game.turn];
+  const occupied = index => board.some(ship => ship.cells.includes(index));
+  if (power === 'radar') return {count:neighbors(cell,config.size,true).filter(index => !shots[index] && occupied(index)).length};
+  if (game.p[1-game.turn].shield) return {hits:[],sunk:[]};
+  const cells = (power === 'air' ? neighbors(cell,config.size) : [cell]).filter(index => !shots[index]);
+  const hits = cells.filter(occupied);
+  const sunk = board.filter(ship => ship.cells.some(index => hits.includes(index)) &&
+    ship.cells.every(index => hits.includes(index) || shots[index] === 'hit'))
+    .map(({name,cells}) => ({name,cells}));
+  return {hits,sunk};
+}
+
+function validReport(report, cells, shots, config) {
+  if (!Array.isArray(report.hits) || report.hits.length > cells.length ||
+      !report.hits.every(cell => cells.includes(cell)) || !Array.isArray(report.sunk) ||
+      report.sunk.length > config.count) return false;
+  const unique = new Set();
+  return report.sunk.every(ship => {
+    if (!ship || typeof ship.name !== 'string' || ship.name.length > 40 || !Array.isArray(ship.cells) ||
+        ship.cells.length < 2 || ship.cells.length > config.size || !ship.cells.some(cell => report.hits.includes(cell))) return false;
+    return ship.cells.every(cell => {
+      if (unique.has(cell) || (!report.hits.includes(cell) && shots[cell] !== 'hit')) return false;
+      unique.add(cell);
+      return true;
+    });
+  });
+}
+
+export function transition(previous, config, pool, actor, action, now, board, remoteReport) {
   if (!previous || previous.phase === 'over' || action.revision !== previous.revision) return;
   const game = JSON.parse(JSON.stringify(previous));
   const attacker = game.p[game.turn];
@@ -36,13 +67,14 @@ export function transition(previous, config, pool, actor, action, now, board) {
   const {type} = action;
 
   if (type === 'resolve') {
-    if (actor === game.turn || game.phase !== 'pending' || !board?.length) return;
+    if (actor === game.turn || game.phase !== 'pending') return;
+    const report = remoteReport || battleReport(game,config,board);
+    if (!report) return;
     const {cell, power} = game.pending;
     delete game.pending;
-    const area = neighbors(cell, config.size, true);
     if (power === 'radar') {
-      attacker.scan = {cell, count: area.filter(index => !attacker.shots?.[index] &&
-        board.some(ship => ship.cells.includes(index))).length};
+      if (!Number.isInteger(report.count) || report.count < 0 || report.count > neighbors(cell,config.size,true).length) return;
+      attacker.scan = {cell, count:report.count};
       game.phase = 'target';
       game.event = {kind: 'radar', actor: game.turn};
     } else {
@@ -54,18 +86,17 @@ export function transition(previous, config, pool, actor, action, now, board) {
         delete defender.shield;
         kind = 'blocked';
       } else {
-        for (const index of cells.filter(target => !shots[target])) {
-          const hit = board.some(ship => ship.cells.includes(index));
+        const targets = cells.filter(index => !shots[index]);
+        if (!validReport(report,targets,shots,config)) return;
+        for (const index of targets) {
+          const hit = report.hits.includes(index);
           shots[index] = hit ? 'hit' : 'miss';
           if (hit) kind = 'hit';
         }
-        for (const ship of board) {
-          if (ship.cells.every(index => ['hit', 'sunk'].includes(shots[index])) &&
-              ship.cells.some(index => shots[index] === 'hit')) {
-            ship.cells.forEach(index => { shots[index] = 'sunk'; });
-            stats.sunk++;
-            sunk.push(ship.name);
-          }
+        for (const ship of report.sunk) {
+          ship.cells.forEach(index => { shots[index] = 'sunk'; });
+          stats.sunk++;
+          sunk.push(ship.name);
         }
         if (sunk.length) kind = 'sunk';
       }

@@ -2,7 +2,7 @@ import {el, button, section, row, field, select, read, store, backLink} from './
 import {types, modes, levels, questionPool, getQuestion, validateCatalog} from './questions.js';
 import {shipSpecs, randomFleet, placement, coordinates, chooseShot} from './board.js';
 import {powers, initialGame, transition, summary, cellAvailable} from './game.js';
-import {configured, connect, seed} from './multiplayer.js';
+import {connect, seed, validCode} from './peer-online.js';
 import {soundsPage, learnPage, teacherPage} from './pages.js';
 import {sound, soundSettings} from './sounds.js';
 
@@ -38,9 +38,10 @@ let toastTimer;
 let feedback;
 let learnFilter;
 let resume = read('resume', null);
+if (!validCode(resume?.code)) resume = null;
 let roomError = '';
 let setupFocus;
-const initialCode = new URLSearchParams(location.search).get('lobby') || '';
+const initialCode = (new URLSearchParams(location.search).get('lobby') || '').toUpperCase();
 
 const feedbackText = {
   right:'Richtige Antwort!', wrong:'Lösung', timeout:'Zeit abgelaufen. Lösung',
@@ -55,14 +56,7 @@ function notify(message, error = false) {
 }
 
 function report(error) {
-  const firebase = {
-    'auth/operation-not-allowed':'Die anonyme Anmeldung muss in Firebase aktiviert werden.',
-    'auth/unauthorized-domain':'Diese Webadresse muss in Firebase freigegeben werden.',
-    'auth/network-request-failed':'Firebase ist gerade nicht erreichbar.',
-    PERMISSION_DENIED:'Firebase hat die Aktion abgelehnt. Die Lobby ist belegt, abgelaufen oder die Sicherheitsregeln passen nicht.'
-  };
-  notify(firebase[error?.code] || (/permission.denied/i.test(error?.message) ? firebase.PERMISSION_DENIED :
-    error?.message || 'Die Aktion konnte nicht abgeschlossen werden.'), true);
+  notify(error?.message || 'Die Aktion konnte nicht abgeschlossen werden.', true);
 }
 
 function guarded(work) {
@@ -80,7 +74,7 @@ function guarded(work) {
 
 function updateStatus() {
   const text = online?.online ? 'Live verbunden' : !navigator.onLine || online ? 'Offline' :
-    configured ? 'Online-Spiel verfügbar' : 'Lokales Spiel verfügbar';
+    'Online-Spiel verfügbar';
   status.textContent = text;
   status.classList.toggle('live', Boolean(online?.online));
   if (code && ['room','setup','battle'].includes(page)) {
@@ -337,7 +331,7 @@ function homePage() {
         el('div', {className:'hero-actions'},
           button('Spielen', () => show('play'), {className:'primary launch'}),
           button(catalog.words.length + ' Fremdwörter entdecken', () => openPage('learn'), {className:'ghost discover'})),
-        resume ? button('Partie fortsetzen', guarded(async () => { await network(); attachRoom(resume.code); }), {className:'ghost resume'}) : null),
+        resume ? button('Partie fortsetzen', guarded(async () => { const mp = await network(); await mp.resume(resume.code); attachRoom(resume.code); }), {className:'ghost resume'}) : null),
       el('div', {className:'hero-graphic', ariaHidden:'true'},
         el('div', {className:'water'}), el('div', {className:'sweep'}), el('img', {src:'./assets/ship.svg', alt:''}),
         el('div', {className:'graphic-label'}, el('span', {className:'signal'}), 'MARINE-RADAR'))),
@@ -391,7 +385,7 @@ function configurePage(solo) {
     }
   }));
   return section(solo ? 'Einzelspieler' : 'Lobby erstellen',
-    !solo && !configured ? el('p', {className:'notice'}, 'Online-Partien benötigen eine einmalige Firebase-Einrichtung. Einzelspieler und Lernbereich sind verfügbar.') : null,
+    !solo ? el('p', {className:'muted'}, 'Erstelle einen Raum und teile den sechsstelligen Code. Lass deinen Browser während der Partie geöffnet.') : null,
     form);
 }
 
@@ -405,9 +399,11 @@ function checkName(input) {
 
 function joinPage() {
   const name = el('input', {required:true,maxLength:20,autocomplete:'nickname',placeholder:'Dein Spitzname',value:selection.name});
-  const id = el('input', {required:true,maxLength:4,inputMode:'numeric',pattern:'[1-9][0-9]{3}',placeholder:'4821',
-    value:/^[1-9]\d{3}$/.test(initialCode) ? initialCode : '', autocomplete:'off'});
-  return section('Lobby beitreten', !configured ? el('p', {className:'notice'}, 'Online-Partien benötigen eine einmalige Firebase-Einrichtung.') : null,
+  const id = el('input', {required:true,maxLength:6,autocapitalize:'characters',pattern:'[A-HJ-NP-Za-hj-np-z2-9]{6}',placeholder:'AB7K3P',
+    value:validCode(initialCode) ? initialCode : '', autocomplete:'off', onInput:event => {
+      event.target.value = event.target.value.toUpperCase().replace(/[^A-HJ-NP-Z2-9]/g, '');
+    }});
+  return section('Lobby beitreten', el('p', {className:'muted'}, 'Gib den Raumcode des Gastgebers ein oder öffne dessen Einladungslink.'),
     el('form', {onSubmit:guarded(async () => {
       const nickname = checkName(name.value);
       const mp = await network();
@@ -416,7 +412,7 @@ function joinPage() {
       try { store('options', selection); } catch { /* Name gilt für diese Sitzung. */ }
       attachRoom(id.value);
       sound('join');
-    })}, el('div', {className:'form-grid'}, field('Spielername', name), field('Vierstelliger Lobbycode', id)),
+    })}, el('div', {className:'form-grid'}, field('Spielername', name), field('Sechsstelliger Raumcode', id)),
     row(el('button', {type:'submit', className:'primary'}, 'Beitreten'), backLink(goHome))));
 }
 
@@ -456,7 +452,7 @@ function invite() {
     }
     qrStatus.remove();
   }).catch(() => { canvas.hidden = true; qrStatus.textContent = 'QR-Code gerade nicht verfügbar.'; });
-  return el('div', {className:'invite'}, el('div', {}, el('span', {className:'muted'}, 'Lobbycode'),
+  return el('div', {className:'invite'}, el('div', {}, el('span', {className:'muted'}, 'Raumcode'),
     el('strong', {className:'lobby-code'}, code), field('Einladungslink', link),
     button('Link kopieren', guarded(async () => {
       link.select();
@@ -794,7 +790,7 @@ async function startApp() {
     const response = await fetch('./data/fremdwoerter.json');
     if (!response.ok) throw Error('Der Fremdwörterkatalog konnte nicht geladen werden.');
     catalog = validateCatalog(await response.json());
-    show(/^[1-9]\d{3}$/.test(initialCode) ? 'join' : 'home');
+    show(validCode(initialCode) ? 'join' : 'home');
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
   } catch (error) {
     app.replaceChildren(section('Wörterflotte konnte nicht starten', el('p', {},

@@ -157,15 +157,11 @@ test('Service Worker enthält alle lokalen Laufzeitressourcen und GitHub-Unterpf
   const read = path => readFileSync(new URL(path, root), 'utf8');
   const manifest = JSON.parse(read('manifest.json'));
   for (const path of [manifest.start_url, manifest.scope, ...manifest.icons.map(icon => icon.src)]) assert.ok(path.startsWith('./'));
-  const scripts = ['app','ui','board','game','questions','multiplayer','firebase-config','pages','sounds'];
+  const scripts = ['app','ui','board','game','questions','peer-online','pages','sounds'];
   for (const name of scripts) {
     assert.ok(read('sw.js').includes("'" + name + "'"));
     for (const [, imported] of read('js/' + name + '.js').matchAll(/from '\.\/(.+?)'/g)) assert.ok(read('js/' + imported));
   }
-  const rules = JSON.parse(read('database.rules.json')).rules;
-  assert.equal(rules['.read'], false);
-  assert.equal(rules['.write'], false);
-  assert.match(rules.rooms.$code['.write'], /auth != null/);
 });
 
 test('QR-Bibliothek erzeugt eine Matrix für einen GitHub-Pages-Einladungslink', async () => {
