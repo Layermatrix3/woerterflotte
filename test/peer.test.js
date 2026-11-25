@@ -86,7 +86,8 @@ test('Peer-Ablauf: Raumcode, Gast, Sperren, Schussbericht, Wiederverbindung und 
     await tick();
     assert.equal(home.game.p[0].shots[0],'hit');
     assert.ok(!JSON.stringify(home).includes('Sehr geheim'));
-    assert.equal(away.game.turn,1);
+    assert.equal(away.game.turn,0);
+    assert.equal(away.game.phase,'question');
     guest.channel.close();
     assert.equal(guest.online,false);
     await guest.dial();

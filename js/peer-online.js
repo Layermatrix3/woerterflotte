@@ -1,6 +1,7 @@
 import {initialGame, transition, battleReport} from './game.js';
 import {questionPool, validateCatalog} from './questions.js';
 import {read, store} from './ui.js';
+import {subjectModes} from './subjects.js';
 
 export const seed = () => crypto.getRandomValues(new Uint32Array(1))[0];
 export const validCode = value => /^[A-HJ-NP-Z2-9]{6}$/.test(value);
@@ -159,7 +160,7 @@ export class PeerOnline {
       peer.on('error', onPeerError);
       channel.on('open', () => {
         const hello = () => {
-          if (channel.open) channel.send({type:'hello',uid:this.uid,name:this.guestName});
+          if (channel.open) channel.send({type:'hello',uid:this.uid,name:this.guestName,version:2});
         };
         helloTimer = setInterval(hello, 1150);
         hello();
@@ -167,7 +168,7 @@ export class PeerOnline {
       channel.on('data', message => {
         if (channel !== this.channel || !message) return;
         if (message.type === 'refused') {
-          failed(Error(message.reason === 'same-device' ? 'Dieser Browser ist bereits Gastgeber. Nutze das zweite iPad oder ein privates Browserfenster.'
+          failed(Error(message.reason === 'update' ? 'Lade Wörterflotte neu. Dieser Raum verwendet eine neuere Spielversion.' : message.reason === 'same-device' ? 'Dieser Browser ist bereits Gastgeber. Nutze das zweite iPad oder ein privates Browserfenster.'
             : 'Der Raum ist bereits belegt oder geschlossen.'));
         } else if (message.type === 'state') {
           clean();
@@ -210,6 +211,11 @@ export class PeerOnline {
     if (!message || !this.room) return;
     if (this.room.stage === 'closed' && message.type !== 'hello') return;
     if (message.type === 'hello') {
+      if (message.version !== 2 && ['plain',...subjectModes].includes(this.room.config.mode)) {
+        channel.send({type:'refused',reason:'update'});
+        setTimeout(() => channel.close(), 200);
+        return;
+      }
       const validName = typeof message.name === 'string' && /^[A-Za-zÄÖÜäöüß0-9][A-Za-zÄÖÜäöüß0-9 ._'-]{0,19}$/.test(message.name);
       const accepted = this.room.stage !== 'closed' && /^[a-f0-9]{32}$/.test(message.uid) && message.uid !== this.uid && validName &&
         (this.room.guest?.uid === message.uid || (!this.room.guest && this.room.stage === 'waiting'));

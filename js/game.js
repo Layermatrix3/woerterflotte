@@ -6,19 +6,19 @@ export const ownStats = () => ({right: 0, wrong: 0, streak: 0, best: 0, time: 0,
 
 export function initialGame(config, seed, now) {
   return {
-    revision: 0, seed, index: 0, turn: 0, phase: 'question', started: now,
-    asked: now, deadline: now + config.time * 1000, remaining: 0,
+    revision: 0, seed, index: 0, turn: 0, phase: config.mode === 'plain' ? 'target' : 'question', started: now,
+    asked: now, deadline: now + config.time * 1000, remaining: config.mode === 'plain' ? 1 : 0,
     p: [{stats: ownStats()}, {stats: ownStats()}]
   };
 }
 
-function nextTurn(game, config, now) {
-  game.turn = 1 - game.turn;
+function nextTurn(game, config, now, keepTurn = false) {
+  if (!keepTurn) game.turn = 1 - game.turn;
   game.index += 1;
-  game.phase = 'question';
+  game.phase = config.mode === 'plain' ? 'target' : 'question';
   game.asked = now;
   game.deadline = now + config.time * 1000;
-  game.remaining = 0;
+  game.remaining = config.mode === 'plain' ? 1 : 0;
   delete game.power;
   delete game.joker;
 }
@@ -109,13 +109,13 @@ export function transition(previous, config, pool, actor, action, now, board, re
       } else if (--game.remaining > 0) {
         game.phase = 'target';
       } else {
-        nextTurn(game, config, now);
+        nextTurn(game, config, now, kind === 'hit' || kind === 'sunk');
       }
     }
   } else {
     if (actor !== game.turn && type !== 'timeout') return;
     if (type === 'timeout' || type === 'answer') {
-      if (game.phase !== 'question' || (type === 'timeout' ? now < game.deadline : now >= game.deadline)) return;
+      if (!pool.length || game.phase !== 'question' || (type === 'timeout' ? now < game.deadline : now >= game.deadline)) return;
       const question = getQuestion(pool, game.seed, game.index);
       const correct = type === 'answer' && accepts(question, action.value);
       stats.time += Math.max(0, Math.min(config.time * 1000, now - game.asked));

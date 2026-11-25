@@ -6,6 +6,7 @@ import {connect, seed, validCode, roomCode} from './peer-online.js';
 import {soundsPage, learnPage, teacherPage} from './pages.js';
 import {sound, soundSettings} from './sounds.js';
 import {turnDetails, hullTiles} from './battle-view.js';
+import {subjectModes} from './subjects.js';
 
 const app = document.querySelector('#app');
 const toast = document.querySelector('#toast');
@@ -124,7 +125,7 @@ function prepare(settings, questions) {
   activeCatalog = questions;
   specs = shipSpecs(settings, questions);
   pool = questionPool(questions, settings.mode, settings.level);
-  if (!pool.length) throw Error('Für diesen Modus sind keine Fragen vorhanden.');
+  if (settings.mode !== 'plain' && !pool.length) throw Error('Für diesen Modus sind keine Fragen vorhanden.');
 }
 
 function savedCatalog() {
@@ -309,7 +310,7 @@ function schedule() {
         sound('fire');
         move('fire', {actor:1, cell});
       }
-    }, 850);
+    }, game.phase === 'question' ? 2600 + Math.random() * 1600 : 1350 + Math.random() * 800);
   }
 }
 
@@ -369,22 +370,32 @@ function configurePage(solo) {
   const limit = select({15:'15 Sekunden',25:'25 Sekunden',45:'45 Sekunden',90:'90 Sekunden'}, opts.time, {name:'time'});
   const mode = select(modes, opts.mode, {name:'mode', onChange: () => {
     if (mode.value === 'quick') { size.value = '6'; count.value = '2'; limit.value = '15'; }
+    updateModeFields();
   }});
   const level = select(levels, opts.level, {name:'level'});
   const ai = select(levels, opts.ai, {name:'ai'});
   const special = el('input', {type:'checkbox', checked:opts.special});
   const custom = el('input', {type:'checkbox', checked:opts.custom});
+  const levelField = field('Aufgaben-Schwierigkeit', level);
+  const timeField = field('Zeit pro Aufgabe', limit);
+  const specialField = el('label', {className:'check'}, special, ' Spezialfähigkeiten');
+  const customField = el('label', {className:'check'}, custom, ' Lokalen Lehrerkatalog verwenden');
+  function updateModeFields() {
+    const plain = mode.value === 'plain';
+    levelField.hidden = timeField.hidden = specialField.hidden = plain;
+    customField.hidden = plain || subjectModes.includes(mode.value);
+  }
+  updateModeFields();
   form.append(el('div', {className:'form-grid'}, field('Spielername', name), field('Spielmodus', mode),
-    field('Fragen-Schwierigkeit', level), field('Spielfeldgröße', size), field('Zeit pro Frage', limit), field('Flotte', count),
+    levelField, field('Spielfeldgröße', size), timeField, field('Flotte', count),
     solo ? field('Computergegner', ai) : null),
-  row(el('label', {className:'check'}, special, ' Spezialfähigkeiten'),
-    el('label', {className:'check'}, custom, ' Lokalen Lehrerkatalog verwenden')),
+  row(specialField,customField),
   row(el('button', {type:'submit', className:'primary'}, solo ? 'Zur Schiffsplatzierung' : 'Lobby erstellen'), backLink(goHome)));
   form.addEventListener('submit', guarded(async () => {
     const settings = {name:checkName(name.value), mode:mode.value, level:+level.value, size:+size.value,
-      time:+limit.value, count:+count.value, special:special.checked, ai:+ai.value};
+      time:+limit.value, count:+count.value, special:mode.value !== 'plain' && special.checked, ai:+ai.value};
     selection = {...settings, custom:custom.checked};
-    const questions = custom.checked ? savedCatalog() : catalog;
+    const questions = !customField.hidden && custom.checked ? savedCatalog() : catalog;
     prepare(settings, questions);
     try { store('options', selection); } catch { /* Einstellungen gelten für diese Sitzung. */ }
     resetPlacement();
@@ -647,7 +658,7 @@ function setupPage() {
 
 function questionBlock(question, onAnswer, header = []) {
   const input = el('input', {required:true, maxLength:260, placeholder:'Deine Antwort', autocomplete:'off',
-    autocapitalize:'off', spellcheck:false, enterKeyHint:'go', 'aria-label':'Deine Antwort'});
+    autocapitalize:'off', spellcheck:false, inputMode:question.type === 'math' ? 'numeric' : 'text', enterKeyHint:'go', 'aria-label':'Deine Antwort'});
   return el('div', {className:'question'},
     row(el('span', {className:'kicker'}, types[question.type]), header),
     el('h3', {}, question.prompt),
@@ -764,16 +775,16 @@ function resultsPage(game) {
           el('dt', {}, 'Trefferquote'), el('dd', {}, result.accuracy + '%'),
           el('dt', {}, 'Ø Antwortzeit'), el('dd', {}, result.average.toFixed(1).replace('.', ',') + ' s')));
     })),
-    el('h3', {}, 'Deine Fragen zum Wiederholen'),
+    config().mode !== 'plain' ? el('h3', {}, 'Deine Aufgaben zum Wiederholen') : null,
     stats.errors.length ? el('ul', {className:'error-list'}, stats.errors.map(item =>
       el('li', {}, el('strong', {}, item.word), el('span', {}, item.prompt), el('span', {}, 'Richtige Lösung: ' + item.answer))))
-      : el('p', {className:'muted'}, 'Alle beantworteten Fragen waren richtig.'),
+      : config().mode !== 'plain' ? el('p', {className:'muted'}, 'Alle beantworteten Aufgaben waren richtig.') : null,
     row(rematchButton(), button('Neue Partie', () => {
       const target = code ? 'play' : 'solo';
       goHome();
       show(target);
     }), code ? button('Zurück zur Lobby', () => { showingRoom = true; show('room'); }) : null,
-    stats.errors.length ? button('Fehler wiederholen', () => {
+    stats.errors.length && !subjectModes.includes(config().mode) ? button('Fehler wiederholen', () => {
       learnFilter = {words: stats.errors.map(item => item.word), catalog:activeCatalog, fromBattle:true};
       show('learn');
     }) : null, backLink(goHome)));
@@ -783,8 +794,8 @@ function helpPage() {
   return section('Spielanleitung', el('ol', {className:'help-list'},
     el('li', {}, 'Erstelle eine Lobby und teile Code oder QR-Link. Beide melden sich bereit und der Gastgeber startet. Im Einzelspieler kannst du direkt beginnen.'),
     el('li', {}, 'Platziere deine Schiffe. Du kannst sie drehen, automatisch verteilen oder einzeln antippen und ziehen.'),
-    el('li', {}, 'Beantworte in deinem Zug eine Fremdwörter-Frage. Richtig gibt Feuerfreigabe. Bei einem Fehler oder Ablauf des Zeitlimits wechselt der Zug.'),
-    el('li', {}, 'Tippe ein freies Feld der gegnerischen Flotte an. Treffer sind rot, Fehlschüsse weiß und versenkte Schiffe orange. Wer die gegnerische Flotte zuerst versenkt, gewinnt.')),
+    el('li', {}, 'In einem Lernmodus löst du vor jedem regulären Schuss eine Aufgabe. Bei einer falschen Antwort oder nach Ablauf der Zeit wechselt der Zug. Im Modus ohne Fragen kannst du sofort zielen.'),
+    el('li', {}, 'Tippe auf ein freies gegnerisches Feld. Bei einem Treffer bleibst du dran. Bei einem Fehlschuss wechselt der Zug. Treffer sind rot, Fehlschüsse weiß und versenkte Schiffe orange. Wer die gegnerische Flotte zuerst versenkt, gewinnt.')),
     el('h3', {}, 'Spezialfähigkeiten'), el('p', {}, 'Wenn aktiviert, gibt es nach je drei richtigen Antworten in Folge eine Ladung (maximal zwei). Pro Zug ist eine Fähigkeit für die Zielphase möglich.'),
     el('ul', {className:'help-list'},
       el('li', {}, 'Radar meldet ungetroffene Schiffsteile in einem 3 × 3-Bereich. Ein regulärer Schuss bleibt.'),

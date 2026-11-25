@@ -26,7 +26,7 @@ test('100 Wörter, sechs Fragetypen und eine vollständige Runde ohne Wiederholu
   assert.ok(accepts(getQuestion(pool.filter(q => q.word === 'Paragraph' && q.type === 'text'), 1, 0), ' paragraf '));
   assert.deepEqual(new Set(questionPool(catalog, 'spelling').map(q => q.options.length)), new Set([0]));
   assert.deepEqual(new Set(questionPool(catalog, 'meaning').map(q => q.type)), new Set(['meaning','match']));
-  for (const mode of Object.keys(modes)) assert.ok(questionPool(catalog, mode, 1).length > 0);
+  for (const mode of Object.keys(modes).filter(mode => mode !== 'plain')) assert.ok(questionPool(catalog, mode, 1).length > 0);
 });
 
 test('Platzierung auf 6 × 6, 8 × 8 und 10 × 10, einschließlich Wortschiffe', () => {
@@ -80,7 +80,8 @@ test('Treffer, Versenkung, Sieger und Ergebnisstatistik', () => {
     game = act(game, 0, 'fire', {cell});
     game = act(game, 1, 'resolve', {}, game.asked + 150, board);
     if (game.phase === 'over') break;
-    game = act(game, 1, 'answer', {value:'Falsche Antwort'});
+    assert.equal(game.turn, cell === 5 ? 1 : 0);
+    if (game.turn === 1) game = act(game, 1, 'answer', {value:'Falsche Antwort'});
   }
   assert.equal(game.winner, 0);
   assert.equal(game.event.sunk[0], 'Chor');
@@ -92,7 +93,7 @@ test('Treffer, Versenkung, Sieger und Ergebnisstatistik', () => {
   assert.equal(player.sunk, 2);
   assert.equal(player.accuracy, 80);
   assert.equal(player.best, 5);
-  assert.equal(summary(game, 1).errors.length, 4);
+  assert.equal(summary(game, 1).errors.length, 1);
   assert.equal(act(game, 0, 'answer', {value:answer(game)}), undefined);
 });
 
@@ -158,7 +159,7 @@ test('Service Worker enthält alle lokalen Laufzeitressourcen und GitHub-Unterpf
   const read = path => readFileSync(new URL(path, root), 'utf8');
   const manifest = JSON.parse(read('manifest.json'));
   for (const path of [manifest.start_url, manifest.scope, ...manifest.icons.map(icon => icon.src)]) assert.ok(path.startsWith('./'));
-  const scripts = ['app','ui','board','game','questions','peer-online','battle-view','pages','sounds'];
+  const scripts = ['app','ui','board','game','questions','subjects','peer-online','battle-view','pages','sounds'];
   for (const name of scripts) {
     assert.ok(read('sw.js').includes("'" + name + "'"));
     for (const [, imported] of read('js/' + name + '.js').matchAll(/from '\.\/(.+?)'/g)) assert.ok(read('js/' + imported));
@@ -176,4 +177,33 @@ test('QR-Bibliothek erzeugt eine Matrix für einen GitHub-Pages-Einladungslink',
   assert.ok(qr.getModuleCount() >= 21);
   assert.equal(qr.isDark(0,0), true);
   assert.equal(qr.isDark(1,1), false);
+});
+
+test('Ohne Fragen startet die Zielwahl sofort und Treffer behalten den Zug', () => {
+  const settings = {...config,mode:'plain'};
+  const board = [{name:'Schiff',cells:[0,1]}];
+  const move = (game, actor, type, cell) => transition(game,settings,[],actor,{type,cell,revision:game.revision},1000,board);
+  let game = initialGame(settings,123,1000);
+  assert.equal(game.phase,'target');
+  assert.equal(move(game,0,'answer'),undefined);
+  game = move(move(game,0,'fire',0),1,'resolve');
+  assert.equal(game.turn,0);
+  assert.equal(game.phase,'target');
+  game = move(move(game,0,'fire',5),1,'resolve');
+  assert.equal(game.turn,1);
+  assert.equal(game.phase,'target');
+  assert.equal(questionPool(catalog,'plain').length,0);
+});
+
+test('Deutsch, Mathe und Englisch haben eigene Aufgaben und richtige Lösungen', () => {
+  for (const [mode,type] of [['german','grammar'],['math','math'],['english','english']]) {
+    const questions = questionPool(catalog,mode,3);
+    assert.ok(questions.length >= 25);
+    assert.ok(questions.every(question => question.type === type && (!question.options.length ||
+      question.options.filter(option => option === question.answer).length === 1)));
+    assert.equal(new Set(questions.map(question => question.prompt)).size, questions.length);
+  }
+  assert.equal(questionPool(catalog,'math',2).find(question => question.prompt === '24 ÷ 6 = ?').answer,'4');
+  assert.equal(questionPool(catalog,'german',1).find(question => question.word === 'Hund').answer,'der');
+  assert.equal(questionPool(catalog,'english',1).find(question => question.prompt.includes('„Apfel“')).answer,'apple');
 });

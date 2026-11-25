@@ -22,6 +22,10 @@ Für eine eigene GitHub-Pages-Kopie lege die Dateien im Quellbranch ab und wähl
 
 Ein erfolgreicher Erstaufruf über HTTPS oder localhost ermöglicht auf unterstützten Browsern den Offline-Start für den Einzelspieler und den Lernbereich. Auf dem iPad lässt sich die veröffentlichte Seite in Safari über **Teilen → Zum Home-Bildschirm** hinzufügen.
 
+## Spielmodi
+
+Im Modus **Schiffeversenken ohne Fragen** darfst du sofort schießen. Die Lernmodi bieten Fremdwörter, Deutsch (Artikel und Mehrzahl), Mathe (Kopfrechnen) und Englisch (Vokabeln). Nach einem Treffer bleibst du dran und löst im Lernmodus die nächste Aufgabe. Fehlschuss, falsche Antwort und Zeitablauf geben den Zug ab.
+
 ## Fragen und Lehrermodus
 
 `data/fremdwoerter.json` enthält 100 Fremdwörter, darunter die 24 ursprünglichen Tafelwörter. Daraus erzeugt das Spiel sechs Fragetypen mit 600 Fragen im vollständigen gemischten Grundkatalog. Die Reihenfolge und Optionen werden pro Partie gemischt.

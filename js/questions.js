@@ -1,10 +1,14 @@
+import {subjectQuestions} from './subjects.js';
+
 export const types = {
+  math:'Mathe', grammar:'Deutsch', english:'Englisch',
   meaning: 'Bedeutung', spelling: 'Rechtschreibung', text: 'Texteingabe',
   gap: 'Lückentext', correction: 'Fehler finden', match: 'Wort zuordnen'
 };
 
 export const modes = {
-  classic: 'Klassisch', spelling: 'Rechtschreibduell', meaning: 'Bedeutungsduell',
+  plain:'Schiffeversenken ohne Fragen', german:'Deutsch · Artikel und Mehrzahl', math:'Mathe · Kopfrechnen', english:'Englisch · Vokabeln',
+  classic:'Fremdwörter · Klassisch', spelling: 'Rechtschreibduell', meaning: 'Bedeutungsduell',
   mixed: 'Gemischter Modus', quick: 'Schnellspiel', words: 'Wörterflotte'
 };
 
@@ -63,6 +67,9 @@ export function validateCatalog(catalog) {
 }
 
 export function questionPool(catalog, mode = 'mixed', level = 3) {
+  if (mode === 'plain') return [];
+  const subject = subjectQuestions(mode, level);
+  if (subject) return subject;
   const allowed = {
     classic: ['meaning', 'spelling', 'match'], spelling: ['text', 'gap', 'correction'],
     meaning: ['meaning', 'match']
