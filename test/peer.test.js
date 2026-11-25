@@ -3,12 +3,15 @@ import assert from 'node:assert/strict';
 import {EventEmitter} from 'node:events';
 import {readFileSync} from 'node:fs';
 import {setImmediate as tick} from 'node:timers/promises';
-import {PeerOnline, validCode} from '../js/peer-online.js';
+import {PeerOnline, validCode, roomCode} from '../js/peer-online.js';
 import {getQuestion, questionPool, validateCatalog} from '../js/questions.js';
 
 class Channel extends EventEmitter {
   open = false;
-  send(data) { queueMicrotask(() => { if (this.open) this.other.emit('data', structuredClone(data)); }); }
+  send(data) {
+    if (this.dropHello && data.type === 'hello') { this.dropHello = false; return; }
+    queueMicrotask(() => { if (this.open) this.other.emit('data', structuredClone(data)); });
+  }
   close() {
     if (!this.open) return;
     this.open = this.other.open = false;
@@ -18,6 +21,7 @@ class Channel extends EventEmitter {
 }
 class TestPeer extends EventEmitter {
   static peers = new Map();
+  static dropNextHello = false;
   constructor(id = String(Math.random())) {
     super();
     this.id = id;
@@ -28,6 +32,8 @@ class TestPeer extends EventEmitter {
     const remote = TestPeer.peers.get(id);
     const outgoing = new Channel(), incoming = new Channel();
     outgoing.peer = id;
+    outgoing.dropHello = TestPeer.dropNextHello;
+    TestPeer.dropNextHello = false;
     incoming.peer = this.id;
     outgoing.other = incoming;
     incoming.other = outgoing;
@@ -50,6 +56,7 @@ test('Peer-Ablauf: Raumcode, Gast, Sperren, Schussbericht, Wiederverbindung und 
   try {
     const code = await host.create(config,catalog);
     assert.ok(validCode(code));
+    TestPeer.dropNextHello = true;
     await guest.join(code,'Kim');
     await assert.rejects(other.join(code,'Robin'),/bereits belegt/);
     let home, away;
@@ -90,4 +97,11 @@ test('Peer-Ablauf: Raumcode, Gast, Sperren, Schussbericht, Wiederverbindung und 
   } finally {
     host.stop(); guest.stop(); other.stop();
   }
+});
+
+test('Raumcode akzeptiert Kleinschreibung, Trennzeichen und Einladungslinks', () => {
+  assert.equal(roomCode(' ab7–k3p '), 'AB7K3P');
+  assert.equal(roomCode(' ab7-k3p '), 'AB7K3P');
+  assert.equal(roomCode('https://layermatrix3.github.io/woerterflotte/?lobby=ab7k3p'), 'AB7K3P');
+  assert.equal(roomCode('AB7K3PO'), '');
 });

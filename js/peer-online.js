@@ -4,6 +4,15 @@ import {read, store} from './ui.js';
 
 export const seed = () => crypto.getRandomValues(new Uint32Array(1))[0];
 export const validCode = value => /^[A-HJ-NP-Z2-9]{6}$/.test(value);
+export function roomCode(input) {
+  let text = String(input ?? '').trim();
+  if (/^https?:\/\//i.test(text)) {
+    try { text = new URL(text).searchParams.get('lobby') || ''; }
+    catch { return ''; }
+  }
+  const normalized = text.toUpperCase().replace(/[\s–—-]+/g, '');
+  return validCode(normalized) ? normalized : '';
+}
 const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const peerId = code => 'woerterflotte-' + code.toLowerCase();
 let library;
@@ -11,7 +20,7 @@ let library;
 export async function connect(onStatus) {
   library ||= new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = 'https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';
+    script.src = './js/vendor/peerjs.min.js';
     script.onload = () => window.Peer ? resolve(window.Peer) : reject(Error('PeerJS konnte nicht geladen werden.'));
     script.onerror = () => reject(Error('Der Signalisierungsdienst konnte nicht geladen werden.'));
     document.head.append(script);
@@ -128,19 +137,43 @@ export class PeerOnline {
     const channel = this.peer.connect(peerId(this.code), {reliable:true});
     this.channel = channel;
     return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => { channel.close(); reject(Error('Der Gastgeber antwortet nicht. Prüfe den Raumcode.')); }, 10000);
-      channel.on('open', () => channel.send({type:'hello',uid:this.uid,name:this.guestName}));
+      let connected = false;
+      let helloTimer;
+      const clean = () => {
+        clearTimeout(timer);
+        clearInterval(helloTimer);
+        peer.off('error', onPeerError);
+      };
+      const failed = error => {
+        clean();
+        reject(error);
+        channel.close();
+      };
+      const onPeerError = error => {
+        if (!connected && ['peer-unavailable','network','socket-error','socket-closed','webrtc'].includes(error.type)) failed(error);
+      };
+      const peer = this.peer;
+      const timer = setTimeout(() => failed(Error(channel.open
+        ? 'Der Raum antwortet nicht. Lade das Spiel auf beiden Geräten neu und versuche es erneut.'
+        : 'Keine direkte Verbindung. Lass den Gastgeber auf der Lobby-Seite und prüfe das WLAN.')), 17000);
+      peer.on('error', onPeerError);
+      channel.on('open', () => {
+        const hello = () => {
+          if (channel.open) channel.send({type:'hello',uid:this.uid,name:this.guestName});
+        };
+        helloTimer = setInterval(hello, 1150);
+        hello();
+      });
       channel.on('data', message => {
         if (channel !== this.channel || !message) return;
         if (message.type === 'refused') {
-          clearTimeout(timer);
-          reject(Error('Der Raum ist bereits belegt oder geschlossen.'));
-          channel.close();
+          failed(Error(message.reason === 'same-device' ? 'Dieser Browser ist bereits Gastgeber. Nutze das zweite iPad oder ein privates Browserfenster.'
+            : 'Der Raum ist bereits belegt oder geschlossen.'));
         } else if (message.type === 'state') {
-          clearTimeout(timer);
-          const wasConnected = Boolean(this.room);
+          clean();
+          if (!connected && Number.isFinite(message.now)) this.clock = message.now - Date.now();
+          connected = true;
           this.room = message.room;
-          if (!wasConnected && Number.isFinite(message.now)) this.clock = message.now - Date.now();
           this.status();
           this.onRoom?.(this.room);
           resolve();
@@ -148,9 +181,9 @@ export class PeerOnline {
           this.requests.get(message.id)?.(message.ok);
         }
       });
-      channel.on('error', error => { clearTimeout(timer); reject(error); });
+      channel.on('error', failed);
       channel.on('close', () => {
-        clearTimeout(timer);
+        clean();
         reject(Error('Die Verbindung zum Gastgeber wurde getrennt.'));
         if (channel !== this.channel) return;
         this.channel = null;
@@ -174,14 +207,19 @@ export class PeerOnline {
   }
 
   receiveGuest(channel, message) {
-    if (!message || !this.room || this.room.stage === 'closed') return;
+    if (!message || !this.room) return;
+    if (this.room.stage === 'closed' && message.type !== 'hello') return;
     if (message.type === 'hello') {
       const validName = typeof message.name === 'string' && /^[A-Za-zÄÖÜäöüß0-9][A-Za-zÄÖÜäöüß0-9 ._'-]{0,19}$/.test(message.name);
-      const accepted = /^[a-f0-9]{32}$/.test(message.uid) && message.uid !== this.uid && validName &&
+      const accepted = this.room.stage !== 'closed' && /^[a-f0-9]{32}$/.test(message.uid) && message.uid !== this.uid && validName &&
         (this.room.guest?.uid === message.uid || (!this.room.guest && this.room.stage === 'waiting'));
       if (!accepted || (this.channel?.open && this.channel !== channel && this.channel.peer !== channel.peer)) {
-        channel.send({type:'refused'});
+        channel.send({type:'refused',reason:message.uid === this.uid ? 'same-device' : 'unavailable'});
         setTimeout(() => channel.close(), 200);
+        return;
+      }
+      if (this.channel === channel && this.room.guest?.uid === message.uid) {
+        if (channel.open) channel.send({type:'state',room:this.room,now:Date.now()});
         return;
       }
       this.channel = channel;

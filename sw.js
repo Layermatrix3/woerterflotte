@@ -1,6 +1,6 @@
-const CACHE = 'woerterflotte-v4';
+const CACHE = 'woerterflotte-v5';
 const ASSETS = ['./', './index.html', './css/style.css', './manifest.json', './assets/ship.svg',
-  './js/vendor/qrcode.js', './assets/radar.svg', './assets/touch.png', './data/fremdwoerter.json',
+  './js/vendor/peerjs.min.js', './js/vendor/qrcode.js', './assets/radar.svg', './assets/touch.png', './data/fremdwoerter.json',
   ...['app','ui','board','game','questions','peer-online','battle-view','pages','sounds'].map(name => './js/' + name + '.js')];
 const urls = new Set(ASSETS.map(path => new URL(path, self.registration.scope).href));
 self.addEventListener('install', event => {

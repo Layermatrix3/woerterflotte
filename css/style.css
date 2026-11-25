@@ -248,3 +248,14 @@ fieldset button { margin-top:.65rem; }
   23% { opacity:1; transform:scale(1.35); }
   to { opacity:0; transform:scale(2.4); }
 }
+
+.placed-flash .hull { animation:ship-settle .46s cubic-bezier(.15,.7,.21,1.1) both; }
+.placed-flash::after { content:""; position:absolute; inset:24%; border:2px solid #9af9ff; border-radius:50%; pointer-events:none; animation:impact .56s ease-out both; }
+.fleet-confirmed { display:flex; align-items:center; gap:.65rem; padding:.7rem 1rem; border:1px solid var(--accent); border-radius:12px; color:var(--accent); background:var(--deep); font-weight:750; animation:appear .32s ease-out both; }
+.fleet-confirmed span { display:grid; place-items:center; width:1.75rem; height:1.75rem; border-radius:50%; background:var(--accent); color:var(--accent-ink); }
+.projectile { width:82%; height:24%; background:linear-gradient(90deg,transparent 0%,#ff7b32 31%,#fff5b4 63%,#e0f6ff 66%,#a7c7da 91%,#f4fcff 92%); border-radius:28% 80% 80% 28%; }
+.projectile::before { content:""; position:absolute; inset:-25% 15% -25% auto; width:24%; background:#de4d60; clip-path:polygon(0 0,100% 50%,0 100%,25% 50%); }
+@keyframes ship-settle {
+  from { transform:translateY(-28%) scale(.78); opacity:.5; }
+  to { transform:none; opacity:1; }
+}

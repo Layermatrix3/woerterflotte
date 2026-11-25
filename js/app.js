@@ -2,7 +2,7 @@ import {el, button, section, row, field, select, read, store, backLink} from './
 import {types, modes, levels, questionPool, getQuestion, validateCatalog} from './questions.js';
 import {shipSpecs, randomFleet, placement, coordinates, chooseShot} from './board.js';
 import {powers, initialGame, transition, summary, cellAvailable} from './game.js';
-import {connect, seed, validCode} from './peer-online.js';
+import {connect, seed, validCode, roomCode} from './peer-online.js';
 import {soundsPage, learnPage, teacherPage} from './pages.js';
 import {sound, soundSettings} from './sounds.js';
 import {turnDetails, hullTiles} from './battle-view.js';
@@ -43,6 +43,7 @@ let resume = read('resume', null);
 if (!validCode(resume?.code)) resume = null;
 let roomError = '';
 let setupFocus;
+let placementFlash = [];
 const initialCode = (new URLSearchParams(location.search).get('lobby') || '').toUpperCase();
 
 const feedbackText = {
@@ -115,6 +116,7 @@ function resetPlacement() {
   selected = 0;
   vertical = false;
   setupFocus = null;
+  placementFlash = [];
   feedback = null;
 }
 
@@ -409,20 +411,33 @@ function checkName(input) {
 
 function joinPage() {
   const name = el('input', {required:true,maxLength:20,autocomplete:'nickname',placeholder:'Dein Spitzname',value:selection.name});
-  const id = el('input', {required:true,maxLength:6,autocapitalize:'characters',pattern:'[A-HJ-NP-Za-hj-np-z2-9]{6}',placeholder:'AB7K3P',
-    value:validCode(initialCode) ? initialCode : '', autocomplete:'off', onInput:event => {
-      event.target.value = event.target.value.toUpperCase().replace(/[^A-HJ-NP-Z2-9]/g, '');
-    }});
+  const id = el('input', {required:true,autocapitalize:'characters',spellcheck:false,placeholder:'AB7K3P',
+    value:validCode(initialCode) ? initialCode : '', autocomplete:'off', enterKeyHint:'go'});
+  const joinStatus = el('p', {className:'notice', role:'status', hidden:true});
   return section('Lobby beitreten', el('p', {className:'muted'}, 'Gib den Raumcode des Gastgebers ein oder öffne dessen Einladungslink.'),
     el('form', {onSubmit:guarded(async () => {
       const nickname = checkName(name.value);
-      const mp = await network();
-      await mp.join(id.value, nickname);
+      const inviteCode = roomCode(id.value);
+      joinStatus.hidden = false;
+      if (!inviteCode) {
+        joinStatus.textContent = 'Gib den sechsstelligen Raumcode ein oder füge den Einladungslink ein.';
+        id.focus();
+        return;
+      }
+      id.value = inviteCode;
+      joinStatus.textContent = 'Verbindung zu Raum ' + inviteCode + ' wird aufgebaut …';
+      try {
+        const mp = await network();
+        await mp.join(inviteCode, nickname);
+      } catch (error) {
+        joinStatus.textContent = error.message || 'Die Lobby ist zurzeit nicht erreichbar.';
+        return;
+      }
       selection.name = nickname;
       try { store('options', selection); } catch { /* Name gilt für diese Sitzung. */ }
-      attachRoom(id.value);
+      attachRoom(inviteCode);
       sound('join');
-    })}, el('div', {className:'form-grid'}, field('Spielername', name), field('Sechsstelliger Raumcode', id)),
+    })}, el('div', {className:'form-grid'}, field('Spielername', name), field('Raumcode oder Einladungslink', id)), joinStatus,
     row(el('button', {type:'submit', className:'primary'}, 'Beitreten'), backLink(goHome))));
 }
 
@@ -518,6 +533,7 @@ function place(cell) {
   board[selected] = {...specs[selected], cells};
   selected = specs.findIndex((_, index) => !board[index]);
   setupFocus = cell;
+  placementFlash = cells;
   render();
   document.querySelector('[data-cell="' + cell + '"]')?.focus({preventScroll:true});
 }
@@ -538,7 +554,8 @@ function grid(title, boardSize, options = {}) {
       const tile = own.get(index);
       const className = ['cell', shot || (tile ? 'ship' : 'sea'),
         index === incoming ? (scan ? 'radar-target' : 'incoming') : '',
-        index === impact ? 'impact' : '', setup && index === setupFocus ? 'selected-cell' : ''].join(' ');
+        index === impact ? 'impact' : '', setup && index === setupFocus ? 'selected-cell' : '',
+        setup && placementFlash.includes(index) ? 'placed-flash' : ''].join(' ');
       const props = {className, 'data-cell':index, ariaLabel:coordinates(index, boardSize) + ' · ' + details};
       const content = [
         tile ? el('span', {className:'hull ' + tile.direction + ' ' + tile.part + (tile.cabin ? ' cabin' : ''), ariaHidden:'true'}) : null,
@@ -596,10 +613,11 @@ function setupPage() {
     }
   }));
   return section('Flotte positionieren',
-    el('p', {className:'muted'}, locked ? 'Deine Flotte steht. Warte auf die andere Flotte.' :
+    el('p', {className:'muted'}, locked ? 'Deine Flotte ist startklar. Warte auf die andere Flotte.' :
       'Wähle ein Schiff und tippe auf sein Startfeld. Du kannst Schiffe auch direkt ins Raster ziehen.'),
     code ? el('p', {className:'muted'}, names()[1 - role()] + (opponentPlaced ? ' ist bereit.' : ' platziert die Flotte.')) : null,
     code ? el('p', {id:'reconnecting', className:'notice', hidden:true}, 'Offline. Die Partie wird nach dem Verbinden fortgesetzt.') : null,
+    locked ? el('div', {className:'fleet-confirmed', role:'status'}, el('span', {ariaHidden:'true'}, '✓'), 'Flotte abgegeben') : null,
     el('div', {className:'setup-layout'}, grid('Deine Flotte', settings.size, {ships:board, interactive:!locked, handler:place, setup:true, side:'mine', subtitle:names()[role()]}),
       el('div', {className:'setup-controls'}, el('div', {className:'fleet'}, fleet),
         row(button(vertical ? 'Drehen · senkrecht' : 'Drehen · waagerecht', () => {
@@ -607,15 +625,17 @@ function setupPage() {
           render();
           document.querySelector('#rotate')?.focus({preventScroll:true});
         }, {disabled:locked, id:'rotate'}),
-        button('Zufällig', () => { board = randomFleet(settings.size, specs); selected = -1; render(); }, {disabled:locked}),
+        button('Zufällig', () => { board = randomFleet(settings.size, specs); selected = -1; setupFocus = null; placementFlash = board.flatMap(ship => ship.cells); render(); }, {disabled:locked}),
         button('Zurücksetzen', () => { resetPlacement(); render(); }, {disabled:locked})),
         button(locked ? 'Flotte bereit' : 'Flotte bestätigen', guarded(async () => {
           if (code) {
             if (!online.online) throw Error('Warte, bis die Verbindung wiederhergestellt ist.');
             store(boardKey(), board);
-            await online.lock(room);
+            if (await online.lock(room)) sound('right');
+            else throw Error('Die Flotte konnte nicht bestätigt werden. Prüfe die Verbindung und versuche es erneut.');
           } else {
             enemy = randomFleet(settings.size, specs);
+            sound('right');
             local.game = initialGame(settings, seed(), Date.now());
             feedback = null;
             show('battle');
